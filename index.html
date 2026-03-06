@@ -7,651 +7,153 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
 <style>
-  :root {
-    --burgundy: #5C1A2E;
-    --claret: #8B2545;
-    --gold: #C9A84C;
-    --cream: #F8F3EC;
-    --parchment: #EEE5D4;
-    --ink: #1C1009;
-    --muted: #8C7B6B;
-    --white-wine: #3A5C40;
-    --red-wine: #7A1C35;
-    --sparkling: #1A3D6B;
-    --fortified: #5C3800;
-    --border: rgba(201,168,76,0.3);
-  }
+:root {
+  --burgundy:#5C1A2E;--claret:#8B2545;--gold:#C9A84C;
+  --cream:#F8F3EC;--parchment:#EEE5D4;--ink:#1C1009;
+  --muted:#8C7B6B;--border:rgba(201,168,76,0.3);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh}
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+/* HEADER */
+.site-header{background:var(--burgundy);padding:48px 32px 40px;text-align:center;position:relative;overflow:hidden}
+.site-header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 50%,rgba(201,168,76,.08),transparent 60%),radial-gradient(ellipse at 70% 30%,rgba(255,255,255,.03),transparent 50%)}
+.header-ornament{font-family:'Cormorant Garamond',serif;color:var(--gold);font-size:13px;letter-spacing:4px;text-transform:uppercase;opacity:.8;margin-bottom:10px}
+.site-title{font-family:'Cormorant Garamond',serif;color:#F8F3EC;font-size:clamp(32px,5vw,56px);font-weight:300;letter-spacing:2px;line-height:1.1}
+.site-title em{font-style:italic;color:var(--gold)}
+.site-subtitle{color:rgba(248,243,236,.55);font-size:13px;font-weight:300;letter-spacing:2px;margin-top:10px}
+.divider-gold{width:60px;height:1px;background:var(--gold);margin:18px auto;opacity:.6}
 
-  body {
-    font-family: 'Noto Sans KR', sans-serif;
-    background: var(--cream);
-    color: var(--ink);
-    min-height: 100vh;
-  }
+/* STATS */
+.stat-bar{background:var(--ink);padding:0 32px;display:flex;justify-content:center;gap:0}
+.stat-item{padding:14px 28px;text-align:center;border-right:1px solid rgba(255,255,255,.08);cursor:default}
+.stat-item:last-child{border-right:none}
+.stat-num{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:600;color:var(--gold)}
+.stat-label{font-size:10px;color:rgba(248,243,236,.4);letter-spacing:1.5px;text-transform:uppercase;margin-top:2px}
 
-  /* ── HEADER ── */
-  .site-header {
-    background: var(--burgundy);
-    padding: 48px 32px 40px;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-  }
-  .site-header::before {
-    content: '';
-    position: absolute; inset: 0;
-    background: radial-gradient(ellipse at 30% 50%, rgba(201,168,76,0.08) 0%, transparent 60%),
-                radial-gradient(ellipse at 70% 30%, rgba(255,255,255,0.03) 0%, transparent 50%);
-  }
-  .header-ornament {
-    font-family: 'Cormorant Garamond', serif;
-    color: var(--gold);
-    font-size: 13px;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    opacity: 0.8;
-    margin-bottom: 10px;
-  }
-  .site-title {
-    font-family: 'Cormorant Garamond', serif;
-    color: #F8F3EC;
-    font-size: clamp(32px, 5vw, 56px);
-    font-weight: 300;
-    letter-spacing: 2px;
-    line-height: 1.1;
-  }
-  .site-title em {
-    font-style: italic;
-    color: var(--gold);
-  }
-  .site-subtitle {
-    color: rgba(248,243,236,0.55);
-    font-size: 13px;
-    font-weight: 300;
-    letter-spacing: 2px;
-    margin-top: 10px;
-  }
-  .divider-gold {
-    width: 60px; height: 1px;
-    background: var(--gold);
-    margin: 18px auto;
-    opacity: 0.6;
-  }
+/* MAP SECTION */
+.map-section{background:var(--ink);padding:0}
+.map-header{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-bottom:1px solid rgba(201,168,76,.2);flex-wrap:wrap;gap:10px}
+.map-title-group{display:flex;align-items:center;gap:12px}
+.map-title{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:600;color:var(--cream)}
+.map-subtitle{font-size:11px;color:rgba(248,243,236,.4);letter-spacing:1px;text-transform:uppercase}
+.map-toggle-btn{padding:7px 18px;background:rgba(201,168,76,.15);border:1px solid var(--gold);color:var(--gold);font-family:'Noto Sans KR',sans-serif;font-size:12px;border-radius:20px;cursor:pointer;transition:all .2s;letter-spacing:.5px}
+.map-toggle-btn:hover{background:rgba(201,168,76,.25)}
+.map-filter-bar{display:none;padding:10px 24px;gap:8px;border-bottom:1px solid rgba(201,168,76,.1);flex-wrap:wrap;background:rgba(0,0,0,.2)}
+.map-filter-bar.open{display:flex}
+.map-filter-btn{padding:5px 14px;border:1px solid rgba(201,168,76,.35);background:transparent;color:rgba(248,243,236,.7);font-size:11px;font-family:'Noto Sans KR',sans-serif;border-radius:14px;cursor:pointer;transition:all .2s}
+.map-filter-btn.active,.map-filter-btn:hover{background:var(--gold);color:var(--ink);border-color:var(--gold)}
+.map-container{max-height:0;overflow:hidden;transition:max-height .5s ease}
+.map-container.open{max-height:500px}
+#wine-map{width:100%;height:460px;display:block}
 
-  /* ── STAT BAR ── */
-  .stat-bar {
-    background: var(--ink);
-    display: flex;
-    justify-content: center;
-    gap: 0;
-    flex-wrap: wrap;
-  }
-  .stat-item {
-    padding: 14px 28px;
-    text-align: center;
-    border-right: 1px solid rgba(255,255,255,0.08);
-    flex: 1;
-    min-width: 100px;
-    max-width: 180px;
-  }
-  .stat-item:last-child { border-right: none; }
-  .stat-num {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 24px;
-    font-weight: 600;
-    color: var(--gold);
-  }
-  .stat-label {
-    font-size: 10px;
-    color: rgba(255,255,255,0.4);
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    margin-top: 2px;
-  }
+/* POPUP */
+.wine-popup{font-family:'Noto Sans KR',sans-serif;min-width:200px}
+.wine-popup-region{font-size:14px;font-weight:700;color:#2C1A0E;margin-bottom:2px}
+.wine-popup-region-en{font-size:11px;color:#8C7B6B;font-style:italic;margin-bottom:6px}
+.wine-popup-tags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px}
+.popup-tag{padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600}
+.popup-tag-red{background:#F0D0D8;color:#7A1C35}
+.popup-tag-white{background:#D5E8D5;color:#2A5C2A}
+.popup-tag-sparkling{background:#D0DDF0;color:#1A3D6B}
+.popup-tag-fortified{background:#E8D8C0;color:#5C3800}
+.wine-popup-grape{font-size:11px;color:#5C3800;margin-bottom:4px}
+.leaflet-popup-content-wrapper{border-radius:8px;padding:0;overflow:hidden}
+.leaflet-popup-content{margin:12px 14px}
 
-  /* ── CONTROLS ── */
-  .controls {
-    background: white;
-    border-bottom: 1px solid var(--border);
-    padding: 20px 24px;
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-    align-items: center;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    box-shadow: 0 2px 20px rgba(0,0,0,0.06);
-  }
-  .controls-label {
-    font-size: 11px;
-    color: var(--muted);
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    font-weight: 500;
-    margin-right: 4px;
-  }
-  .tab-group {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-  }
-  .tab-btn {
-    padding: 7px 16px;
-    border-radius: 20px;
-    border: 1.5px solid var(--border);
-    background: transparent;
-    font-family: 'Noto Sans KR', sans-serif;
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--muted);
-    cursor: pointer;
-    transition: all 0.2s;
-    letter-spacing: 0.5px;
-    white-space: nowrap;
-  }
-  .tab-btn:hover { border-color: var(--gold); color: var(--ink); }
-  .tab-btn.active { background: var(--burgundy); border-color: var(--burgundy); color: white; }
-  .tab-btn.type-red.active { background: var(--red-wine); border-color: var(--red-wine); }
-  .tab-btn.type-white.active { background: var(--white-wine); border-color: var(--white-wine); }
-  .tab-btn.type-sparkling.active { background: var(--sparkling); border-color: var(--sparkling); }
-  .tab-btn.type-fortified.active { background: var(--fortified); border-color: var(--fortified); }
+/* CONTROLS */
+.controls-wrap{background:var(--parchment);border-bottom:2px solid var(--border);padding:16px 24px;display:flex;flex-direction:column;gap:10px;position:sticky;top:0;z-index:100}
+.search-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.search-wrap{position:relative;flex:1;min-width:200px}
+.search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:14px;pointer-events:none}
+.search-input{width:100%;padding:9px 14px 9px 34px;border:1px solid var(--border);border-radius:6px;background:#fff;font-family:'Noto Sans KR',sans-serif;font-size:13px;color:var(--ink);outline:none;transition:border-color .2s}
+.search-input:focus{border-color:var(--gold)}
+.result-info{font-size:12px;color:var(--muted)}
+.result-info strong{color:var(--ink)}
 
-  .divider-v {
-    width: 1px; height: 28px;
-    background: var(--border);
-    margin: 0 4px;
-  }
+/* TABS */
+.tabs-row{display:flex;gap:6px;flex-wrap:wrap}
+.tab-btn{padding:6px 14px;border:1px solid var(--border);border-radius:20px;background:#fff;font-family:'Noto Sans KR',sans-serif;font-size:12px;color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap}
+.tab-btn:hover{border-color:var(--gold);color:var(--ink)}
+.tab-btn.active{background:var(--burgundy);border-color:var(--burgundy);color:#fff}
+.tab-btn.wt-레드.active{background:#7A1C35;border-color:#7A1C35}
+.tab-btn.wt-화이트.active{background:#3A5C40;border-color:#3A5C40}
+.tab-btn.wt-스파클링.active{background:#1A3D6B;border-color:#1A3D6B}
+.tab-btn.wt-로제.active{background:#C9547A;border-color:#C9547A}
+.tab-btn.wt-주정강화.active{background:#5C3800;border-color:#5C3800}
+.tabs-divider{width:1px;background:var(--border);margin:0 4px}
 
-  .search-wrap {
-    margin-left: auto;
-    position: relative;
-  }
-  .search-input {
-    padding: 8px 16px 8px 36px;
-    border: 1.5px solid var(--border);
-    border-radius: 20px;
-    font-family: 'Noto Sans KR', sans-serif;
-    font-size: 13px;
-    color: var(--ink);
-    background: var(--cream);
-    outline: none;
-    width: 200px;
-    transition: border-color 0.2s;
-  }
-  .search-input:focus { border-color: var(--gold); }
-  .search-icon {
-    position: absolute; left: 12px; top: 50%;
-    transform: translateY(-50%);
-    font-size: 14px;
-    color: var(--muted);
-    pointer-events: none;
-  }
+/* MAIN */
+.main-content{max-width:1200px;margin:0 auto;padding:24px 24px 60px}
 
-  /* ── MAIN LAYOUT ── */
-  .main {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 32px 24px;
-  }
+/* COUNTRY BLOCK */
+.country-block{margin-bottom:36px}
+.country-header{display:flex;align-items:center;gap:10px;padding-bottom:10px;margin-bottom:14px;border-bottom:2px solid var(--border)}
+.country-flag{font-size:22px}
+.country-name{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--burgundy)}
+.country-count{font-size:11px;color:var(--muted);margin-left:auto;letter-spacing:1px}
 
-  /* ── VIEW TOGGLE ── */
-  .view-toggle {
-    display: flex;
-    justify-content: flex-end;
-    gap: 8px;
-    margin-bottom: 20px;
-  }
-  .view-btn {
-    padding: 6px 14px;
-    border: 1px solid var(--border);
-    background: white;
-    border-radius: 6px;
-    font-size: 12px;
-    color: var(--muted);
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .view-btn.active { background: var(--ink); color: white; border-color: var(--ink); }
+/* WINE TYPE LABEL */
+.wine-type-section{margin-bottom:20px}
+.wine-type-label{display:inline-block;padding:3px 12px;border-radius:12px;font-size:11px;font-weight:600;letter-spacing:.5px;margin-bottom:10px}
+.wt-레드{background:#F0D0D8;color:#7A1C35}
+.wt-화이트{background:#D5E8D5;color:#2A5C2A}
+.wt-스파클링{background:#D0DDF0;color:#1A3D6B}
+.wt-로제{background:#F5D5E5;color:#C9547A}
+.wt-주정강화셰리{background:#E8D8C0;color:#5C3800}
+.wt-주정강화포트{background:#E0C8C8;color:#6B1818}
 
-  /* ── SECTION HEADER ── */
-  .section-header {
-    display: flex;
-    align-items: baseline;
-    gap: 12px;
-    margin-bottom: 20px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid var(--border);
-  }
-  .section-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 28px;
-    font-weight: 600;
-    color: var(--ink);
-  }
-  .section-count {
-    font-size: 12px;
-    color: var(--muted);
-    font-weight: 400;
-  }
-  .section-type-badge {
-    padding: 3px 10px;
-    border-radius: 12px;
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.5px;
-  }
+/* GRAPE GROUP */
+.grape-group{margin-bottom:12px}
+.grape-header{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.grape-name{font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.5px}
+.grape-count-badge{font-size:10px;color:var(--muted);padding:1px 8px;border:1px solid var(--border);border-radius:8px}
 
-  /* ── COUNTRY BLOCK ── */
-  .country-block {
-    margin-bottom: 48px;
-  }
-  .country-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 16px;
-  }
-  .country-flag { font-size: 22px; }
-  .country-name {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 22px;
-    font-weight: 600;
-    color: var(--burgundy);
-  }
-  .country-count {
-    font-size: 11px;
-    color: var(--muted);
-    background: var(--parchment);
-    padding: 2px 8px;
-    border-radius: 10px;
-  }
+/* CARD */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.wine-card{background:#fff;border-radius:10px;overflow:hidden;border:1px solid #EDE5D8;transition:transform .15s,box-shadow .15s;display:flex;flex-direction:column}
+.wine-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(92,26,46,.1)}
+.card-stripe{height:4px}
+.stripe-레드{background:linear-gradient(90deg,#7A1C35,#B04060)}
+.stripe-화이트{background:linear-gradient(90deg,#3A5C40,#6A9C6A)}
+.stripe-스파클링{background:linear-gradient(90deg,#1A3D6B,#4A7DBB)}
+.stripe-로제{background:linear-gradient(90deg,#C9547A,#E590AA)}
+.stripe-주정강화(셰리),.stripe-셰리{background:linear-gradient(90deg,#8B6914,#C9A84C)}
+.stripe-주정강화(포트),.stripe-포트{background:linear-gradient(90deg,#6B1818,#B03030)}
+.card-body{padding:14px 16px;flex:1;display:flex;flex-direction:column;gap:6px}
+.card-label-kr{font-weight:700;font-size:15px;color:var(--ink)}
+.card-label-en{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--muted);font-size:13px}
+.card-meta{display:flex;flex-wrap:wrap;gap:4px}
+.meta-tag{font-size:10px;padding:2px 8px;border-radius:10px;background:var(--parchment);color:var(--muted)}
+.card-detail{font-size:12px;color:#5A4A3A;line-height:1.55}
+.card-detail-row{display:flex;gap:6px;margin-bottom:2px}
+.detail-icon{flex-shrink:0;opacity:.6}
+.card-unique{font-size:11px;color:var(--muted);border-top:1px solid #F0E8DC;padding-top:6px;margin-top:4px;font-style:italic}
 
-  /* ── WINE TYPE SECTION ── */
-  .wine-type-section {
-    margin-bottom: 28px;
-  }
-  .wine-type-label {
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    padding: 4px 12px;
-    border-radius: 4px;
-    margin-bottom: 12px;
-    display: inline-block;
-  }
-  .wt-레드 { background: #FBEAED; color: var(--red-wine); }
-  .wt-화이트 { background: #EAF0EA; color: var(--white-wine); }
-  .wt-스파클링 { background: #E8EDF5; color: var(--sparkling); }
-  .wt-주정강화셰리 { background: #F5EDE0; color: var(--fortified); }
-  .wt-주정강화포트 { background: #F0E8E8; color: #6B1010; }
+/* EMPTY */
+.empty-state{text-align:center;padding:60px 20px;color:var(--muted)}
+.empty-state-icon{font-size:40px;margin-bottom:12px}
+.empty-state-text{font-size:14px}
 
-  /* ── GRAPE GROUP ── */
-  .grape-group {
-    margin-bottom: 20px;
-  }
-  .grape-header {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    cursor: pointer;
-    user-select: none;
-  }
-  .grape-name {
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--ink);
-  }
-  .grape-count-badge {
-    font-size: 10px;
-    color: var(--muted);
-    background: var(--parchment);
-    padding: 1px 7px;
-    border-radius: 8px;
-  }
-  .grape-toggle {
-    margin-left: auto;
-    font-size: 14px;
-    color: var(--muted);
-    transition: transform 0.2s;
-  }
-  .grape-toggle.open { transform: rotate(90deg); }
-
-  /* ── CARD GRID ── */
-  .card-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 12px;
-  }
-
-  /* ── WINE CARD ── */
-  .wine-card {
-    background: white;
-    border-radius: 10px;
-    overflow: hidden;
-    border: 1px solid #F0E8DF;
-    transition: transform 0.2s, box-shadow 0.2s;
-    position: relative;
-  }
-  .wine-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(92,26,46,0.1);
-  }
-  .card-stripe {
-    height: 4px;
-  }
-  .stripe-레드 { background: linear-gradient(90deg, var(--red-wine), #C44070); }
-  .stripe-화이트 { background: linear-gradient(90deg, var(--white-wine), #6A9B72); }
-  .stripe-스파클링 { background: linear-gradient(90deg, var(--sparkling), #4A7FBB); }
-  .stripe-주정강화셰리 { background: linear-gradient(90deg, var(--fortified), #A07840); }
-  .stripe-주정강화포트 { background: linear-gradient(90deg, #6B1010, #AA3030); }
-
-  .card-body { padding: 14px 16px; }
-
-  .card-label-kr {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 20px;
-    font-weight: 600;
-    color: var(--ink);
-    line-height: 1.1;
-  }
-  .card-label-en {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 13px;
-    font-style: italic;
-    color: var(--muted);
-    margin-bottom: 10px;
-  }
-
-  .card-meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-    margin-bottom: 10px;
-  }
-  .meta-tag {
-    font-size: 10px;
-    padding: 2px 8px;
-    border-radius: 10px;
-    font-weight: 500;
-    letter-spacing: 0.3px;
-  }
-  .meta-quality {
-    background: #FEF9ED;
-    color: #8B6A00;
-    border: 1px solid #ECD47E;
-  }
-  .meta-grape {
-    background: #F0EDE8;
-    color: #5C4830;
-    border: 1px solid #D4C9B8;
-  }
-
-  .card-detail {
-    font-size: 11px;
-    color: var(--muted);
-    line-height: 1.7;
-  }
-  .card-detail-row {
-    display: flex;
-    gap: 6px;
-    margin-bottom: 2px;
-  }
-  .detail-icon { flex-shrink: 0; }
-  .detail-text { flex: 1; }
-
-  .card-unique {
-    margin-top: 10px;
-    padding-top: 10px;
-    border-top: 1px solid #F0E8E0;
-    font-size: 11px;
-    color: var(--ink);
-    font-style: italic;
-    opacity: 0.8;
-  }
-
-  /* ── TABLE VIEW ── */
-  .table-view { display: none; }
-  .table-view.visible { display: block; }
-  .card-view.hidden { display: none; }
-
-  .wine-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: white;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.05);
-    margin-bottom: 28px;
-    font-size: 12px;
-  }
-  .wine-table th {
-    background: var(--ink);
-    color: rgba(255,255,255,0.7);
-    padding: 10px 14px;
-    text-align: left;
-    font-weight: 500;
-    font-size: 11px;
-    letter-spacing: 0.8px;
-    white-space: nowrap;
-  }
-  .wine-table td {
-    padding: 10px 14px;
-    border-bottom: 1px solid #F5EEE8;
-    vertical-align: top;
-    line-height: 1.5;
-  }
-  .wine-table tr:last-child td { border-bottom: none; }
-  .wine-table tr:hover td { background: #FDF9F5; }
-  .td-label { font-weight: 600; font-size: 13px; }
-  .td-en { color: var(--muted); font-style: italic; font-family: 'Cormorant Garamond', serif; font-size: 13px; }
-
-  /* ── EMPTY STATE ── */
-  .empty-state {
-    text-align: center;
-    padding: 60px 20px;
-    color: var(--muted);
-  }
-  .empty-state-icon { font-size: 40px; margin-bottom: 12px; }
-  .empty-state-text { font-size: 14px; }
-
-  /* ── SECTION CONTAINER ── */
-  .type-section { display: none; }
-  .type-section.visible { display: block; }
-
-  /* ── RESULT COUNT ── */
-  .result-info {
-    font-size: 12px;
-    color: var(--muted);
-    margin-bottom: 16px;
-  }
-  .result-info strong { color: var(--ink); }
-
-  /* ── HIDDEN/VISIBLE CARD ── */
-  .wine-card.hidden, .wine-card.filtered-out { display: none; }
-  .country-block.no-results { display: none; }
-  .grape-group.no-results { display: none; }
-
-  /* scrollbar */
-  ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track { background: var(--parchment); }
-  ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
-
-  @media (max-width: 640px) {
-    .controls { gap: 8px; }
-    .search-wrap { margin-left: 0; width: 100%; }
-    .search-input { width: 100%; }
-    .divider-v { display: none; }
-    .stat-item { max-width: 90px; padding: 10px 14px; }
-    .stat-num { font-size: 18px; }
-  }
-
-  /* ── MAP SECTION ── */
-  .map-section {
-    background: var(--ink);
-    padding: 0;
-  }
-  .map-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 16px 24px;
-    border-bottom: 1px solid rgba(201,168,76,0.2);
-    flex-wrap: wrap;
-    gap: 12px;
-  }
-  .map-title-group {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .map-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 20px;
-    font-weight: 600;
-    color: var(--cream);
-  }
-  .map-subtitle {
-    font-size: 11px;
-    color: rgba(248,243,236,0.4);
-    letter-spacing: 1px;
-    text-transform: uppercase;
-  }
-  .map-toggle-btn {
-    padding: 8px 20px;
-    background: rgba(201,168,76,0.15);
-    border: 1px solid var(--gold);
-    color: var(--gold);
-    font-family: 'Noto Sans KR', sans-serif;
-    font-size: 12px;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: all 0.2s;
-    letter-spacing: 0.5px;
-  }
-  .map-toggle-btn:hover, .map-toggle-btn.open {
-    background: var(--gold);
-    color: var(--ink);
-  }
-  #map-container {
-    display: none;
-    height: 480px;
-    position: relative;
-  }
-  #map-container.open { display: block; }
-  #wine-map { height: 100%; width: 100%; }
-
-  /* Leaflet popup customization */
-  .wine-popup {
-    font-family: 'Noto Sans KR', sans-serif;
-    min-width: 220px;
-  }
-  .wine-popup-region {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 18px;
-    font-weight: 600;
-    color: #1C1009;
-    margin-bottom: 4px;
-  }
-  .wine-popup-region-en {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    font-size: 13px;
-    color: #8C7B6B;
-    margin-bottom: 8px;
-  }
-  .wine-popup-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
-    margin-bottom: 8px;
-  }
-  .popup-tag {
-    font-size: 10px;
-    padding: 2px 7px;
-    border-radius: 10px;
-    font-weight: 500;
-  }
-  .popup-tag-red { background: #FBEAED; color: #7A1C35; }
-  .popup-tag-white { background: #EAF0EA; color: #3A5C40; }
-  .popup-tag-sparkling { background: #E8EDF5; color: #1A3D6B; }
-  .popup-tag-fortified { background: #F5EDE0; color: #5C3800; }
-  .wine-popup-style {
-    font-size: 11px;
-    color: #5C4830;
-    line-height: 1.6;
-  }
-  .wine-popup-aroma {
-    font-size: 11px;
-    color: #8C7B6B;
-    margin-top: 4px;
-    font-style: italic;
-  }
-  .wine-popup-grape {
-    font-size: 10px;
-    color: #8C7B6B;
-    margin-top: 6px;
-    padding-top: 6px;
-    border-top: 1px solid #F0E8E0;
-  }
-
-  /* map filter bar */
-  .map-filter-bar {
-    display: none;
-    background: rgba(28,16,9,0.95);
-    padding: 10px 24px;
-    gap: 8px;
-    flex-wrap: wrap;
-    align-items: center;
-    border-bottom: 1px solid rgba(201,168,76,0.15);
-  }
-  .map-filter-bar.open { display: flex; }
-  .map-filter-label {
-    font-size: 10px;
-    color: rgba(248,243,236,0.4);
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    margin-right: 4px;
-  }
-  .map-filter-btn {
-    padding: 5px 12px;
-    border-radius: 14px;
-    border: 1px solid rgba(201,168,76,0.3);
-    background: transparent;
-    font-family: 'Noto Sans KR', sans-serif;
-    font-size: 11px;
-    color: rgba(248,243,236,0.6);
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .map-filter-btn:hover { border-color: var(--gold); color: var(--gold); }
-  .map-filter-btn.active { background: var(--gold); color: var(--ink); border-color: var(--gold); font-weight: 600; }
-
-  .leaflet-popup-content-wrapper {
-    border-radius: 8px !important;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.15) !important;
-  }
-  .leaflet-popup-content { margin: 14px 16px !important; }
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--parchment)}
+::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px}
+@media(max-width:640px){.card-grid{grid-template-columns:1fr}.stat-item{padding:10px 14px}.stat-num{font-size:20px}}
 </style>
 </head>
 <body>
 
 <header class="site-header">
-  <div class="header-ornament">Wine & Spirit Education Trust</div>
-  <h1 class="site-title">WSET Level 2<br><em>라벨 용어 사전</em></h1>
+  <div class="header-ornament">Wine Label Reference</div>
+  <h1 class="site-title">WSET Level 2 <em>라벨 용어 사전</em></h1>
   <div class="divider-gold"></div>
-  <p class="site-subtitle">Label Terms · Grape Varieties · Regions · Styles</p>
+  <p class="site-subtitle">품종별 · 국가별 라벨 용어 완전 정리</p>
 </header>
 
 <div class="stat-bar">
-  <div class="stat-item"><div class="stat-num" id="stat-total">189</div><div class="stat-label">총 항목</div></div>
-  <div class="stat-item"><div class="stat-num" id="stat-grapes">29</div><div class="stat-label">품종</div></div>
-  <div class="stat-item"><div class="stat-num" id="stat-countries">12</div><div class="stat-label">생산국</div></div>
-  <div class="stat-item"><div class="stat-num" id="stat-types">5</div><div class="stat-label">와인 유형</div></div>
+  <div class="stat-item"><div class="stat-num">189</div><div class="stat-label">Total Terms</div></div>
+  <div class="stat-item"><div class="stat-num">29</div><div class="stat-label">Grape Varieties</div></div>
+  <div class="stat-item"><div class="stat-num">12</div><div class="stat-label">Countries</div></div>
 </div>
 
 <!-- MAP SECTION -->
@@ -660,156 +162,124 @@
     <div class="map-title-group">
       <div>
         <div class="map-title">🗺️ 와인 산지 지도</div>
-        <div class="map-subtitle">클릭하여 상세 정보 확인</div>
+        <div class="map-subtitle">Wine Region Map</div>
       </div>
     </div>
     <button class="map-toggle-btn" id="map-toggle-btn" onclick="toggleMap()">지도 펼치기 ▾</button>
   </div>
-  <div class="map-filter-bar" id="map-filter-bar">
-    <span class="map-filter-label">유형 필터</span>
+  <div id="map-filter-bar" class="map-filter-bar">
     <button class="map-filter-btn active" data-mtype="all">전체</button>
-    <button class="map-filter-btn" data-mtype="레드">🍷 레드</button>
-    <button class="map-filter-btn" data-mtype="화이트">🥂 화이트</button>
-    <button class="map-filter-btn" data-mtype="스파클링">✨ 스파클링</button>
-    <button class="map-filter-btn" data-mtype="주정강화(셰리)">🍸 셰리</button>
-    <button class="map-filter-btn" data-mtype="주정강화(포트)">🫙 포트</button>
+    <button class="map-filter-btn wt-레드" data-mtype="레드">레드</button>
+    <button class="map-filter-btn wt-화이트" data-mtype="화이트">화이트</button>
+    <button class="map-filter-btn wt-스파클링" data-mtype="스파클링">스파클링</button>
+    <button class="map-filter-btn wt-주정강화" data-mtype="주정강화">주정강화</button>
   </div>
-  <div id="map-container">
+  <div id="map-container" class="map-container">
     <div id="wine-map"></div>
   </div>
 </div>
 
-<div class="controls">
-  <span class="controls-label">유형</span>
-  <div class="tab-group" id="type-tabs">
-    <button class="tab-btn active" data-type="all">전체</button>
-    <button class="tab-btn type-red" data-type="레드">🍷 레드</button>
-    <button class="tab-btn type-white" data-type="화이트">🥂 화이트</button>
-    <button class="tab-btn type-sparkling" data-type="스파클링">✨ 스파클링</button>
-    <button class="tab-btn type-fortified" data-type="주정강화(셰리)">🍸 셰리</button>
-    <button class="tab-btn type-fortified" data-type="주정강화(포트)">🫙 포트</button>
+<!-- CONTROLS -->
+<div class="controls-wrap">
+  <div class="search-row">
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" class="search-input" id="search-input" placeholder="라벨명, 품종, 국가, 향미로 검색...">
+    </div>
+    <span class="result-info" id="result-info"></span>
   </div>
-  <div class="divider-v"></div>
-  <span class="controls-label">나라</span>
-  <div class="tab-group" id="country-tabs">
-    <button class="tab-btn active" data-country="all">전체</button>
+  <div class="tabs-row" id="type-tabs">
+    <button class="tab-btn active" data-type="all">전체 보기</button>
+    <button class="tab-btn wt-레드" data-type="레드">🍷 레드</button>
+    <button class="tab-btn wt-화이트" data-type="화이트">🥂 화이트</button>
+    <button class="tab-btn wt-스파클링" data-type="스파클링">🫧 스파클링</button>
+    <button class="tab-btn wt-로제" data-type="로제">🌸 로제</button>
+    <button class="tab-btn wt-주정강화" data-type="주정강화">🍾 주정강화</button>
+    <span class="tabs-divider"></span>
+    <button class="tab-btn" id="country-all-btn" data-country="all">🌍 전체 국가</button>
   </div>
-  <div class="search-wrap">
-    <span class="search-icon">🔍</span>
-    <input type="text" class="search-input" id="search-input" placeholder="라벨명, 품종 검색...">
-  </div>
+  <div class="tabs-row" id="country-tabs"></div>
 </div>
 
-<main class="main" id="main-content">
-  <div class="result-info" id="result-info"></div>
+<main class="main-content">
   <div id="content-area"></div>
 </main>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>
-// ── WINE DATA ──
-const RAW = [{"grape":"피노 누아","country":"프랑스","label_kr":"부르고뉴","label_en":"Bourgogne","style":"가볍고 산도 높음, 신선한 붉은 과일, 타닌 부드러움","quality":"좋음~훌륭함","aroma":"붉은 체리, 라즈베리, 가벼운 흙 향","unique":"가볍고 산도 높아 신선한 느낌 강조","wine_type":"레드"},{"grape":"피노 누아","country":"프랑스","label_kr":"빌라주","label_en":"Village","style":"가볍고 산도 높음, 붉은 과일 풍부, 더 많은 복합성","quality":"좋음~훌륭함","aroma":"붉은 체리, 라즈베리, 약한 오크 풍미","unique":"더 농축된 과일향과 복합성","wine_type":"레드"},{"grape":"피노 누아","country":"프랑스","label_kr":"제브레-샹베르탕","label_en":"Gevrey-Chambertin","style":"중간 바디, 복합적, 붉은 과일, 흙, 타닌 존재","quality":"좋음~훌륭함","aroma":"붉은 체리, 블랙 체리, 흙, 향신료","unique":"흙과 향신료가 분명, 숙성 잠재력 있음","wine_type":"레드"},{"grape":"피노 누아","country":"미국","label_kr":"로스 카네로스","label_en":"Los Carneros","style":"가볍고 산도 중간~높음, 붉은 과일, 약한 오크","quality":"좋음~훌륭함","aroma":"딸기, 라즈베리, 붉은 자두, 가벼운 오크","unique":"서늘한 기후 영향, 산도 높고 과일이 선명","wine_type":"레드"},{"grape":"피노 누아","country":"미국","label_kr":"소노마","label_en":"Sonoma","style":"가볍거나 중간 바디, 붉은 과일, 부드러운 타닌","quality":"좋음~훌륭함","aroma":"딸기, 붉은 자두, 라즈베리, 약한 오크","unique":"온화한 기후, 부드럽고 쉽게 접근 가능","wine_type":"레드"},{"grape":"피노 누아","country":"미국","label_kr":"오리건","label_en":"Oregon","style":"가볍거나 중간 바디, 붉은 과일, 산도 높음, 약한 오크","quality":"좋음~훌륭함","aroma":"라즈베리, 체리, 붉은 자두, 향신료","unique":"서늘한 기후, 산도 높고 우아한 스타일","wine_type":"레드"},{"grape":"피노 누아","country":"칠레","label_kr":"카사블랑카 밸리","label_en":"Casablanca Valley","style":"가볍고 산도 높음, 신선한 붉은 과일, 산뜻한 스타일","quality":"좋음","aroma":"라즈베리, 체리, 크랜베리, 산뜻하고 신선함","unique":"서늘한 해양성 기후, 산뜻하고 과일 주도형","wine_type":"레드"},{"grape":"피노 누아","country":"호주","label_kr":"야라 밸리","label_en":"Yarra Valley","style":"가볍거나 중간 바디, 산도 높음, 붉은 과일, 약한 오크","quality":"좋음~훌륭함","aroma":"라즈베리, 체리, 크랜베리, 향신료","unique":"산도 높고 향신료 뉘앙스, 고급 스타일","wine_type":"레드"},{"grape":"피노 누아","country":"뉴질랜드","label_kr":"마틴버러","label_en":"Martinborough","style":"중간 바디, 산도 높음, 붉은 과일, 약한 오크","quality":"좋음~훌륭함","aroma":"체리, 라즈베리, 붉은 자두, 약한 오크","unique":"풍부한 과일향, 산도 균형 좋음","wine_type":"레드"},{"grape":"피노 누아","country":"뉴질랜드","label_kr":"센트럴 오타고","label_en":"Central Otago","style":"중간 바디, 풍부한 붉은 과일, 산도 높음, 타닌 부드러움","quality":"좋음~훌륭함","aroma":"붉은 자두, 라즈베리, 크랜베리, 풍부한 과일","unique":"풍부하고 농축된 과일, 산도 높고 구조 좋음","wine_type":"레드"},{"grape":"진판델/프리미티보","country":"미국","label_kr":"캘리포니아 올드 바인 진판델","label_en":"California Old Vine Zinfandel","style":"진한 바디, 높은 알코올, 타닌 중간~높음","quality":"좋음~훌륭함","aroma":"블랙베리, 자두, 건포도, 바닐라, 향신료","unique":"농축된 과일 풍미, 숙성 잠재력 있음","wine_type":"레드"},{"grape":"진판델/프리미티보","country":"이탈리아","label_kr":"풀리아","label_en":"Puglia","style":"중간~진한 바디, 타닌 중간, 산도 중간","quality":"허용~좋음","aroma":"블랙 체리, 자두, 향신료, 약간의 달콤한 과일 풍미","unique":"가격 대비 훌륭한 품질, 과일 중심의 부드러운 스타일","wine_type":"레드"},{"grape":"리슬링","country":"독일","label_kr":"모젤","label_en":"Mosel","style":"가볍고 산도 매우 높음, 저알코올, 드라이~오프드라이","quality":"좋음~훌륭함","aroma":"청사과, 라임, 꽃, 젖은 돌, 꿀 (숙성 시 석유향)","unique":"가볍고 매우 섬세한 스타일, 석유향 발달","wine_type":"화이트"},{"grape":"리슬링","country":"독일","label_kr":"카비넬","label_en":"Kabinett","style":"가볍고 산도 높음, 드라이~오프드라이","quality":"좋음~훌륭함","aroma":"청사과, 라임, 복숭아, 가벼운 꿀, 꽃","unique":"가벼운 바디, 상쾌하고 쉬운 음용","wine_type":"화이트"},{"grape":"리슬링","country":"프랑스","label_kr":"알자스","label_en":"Alsace","style":"중간~풍부한 바디, 산도 높음, 드라이","quality":"좋음~훌륭함","aroma":"복숭아, 살구, 꽃, 약한 꿀, 스파이시함 (숙성 시 석유향)","unique":"드라이 스타일, 복합적이고 숙성 잠재력","wine_type":"화이트"},{"grape":"리슬링","country":"호주","label_kr":"에덴 밸리","label_en":"Eden Valley","style":"가볍거나 중간 바디, 산도 매우 높음, 드라이","quality":"좋음~훌륭함","aroma":"라임, 레몬, 꽃, 미네랄, 석유향 (숙성 시)","unique":"산도 매우 높고 신선한 라임향, 드라이","wine_type":"화이트"},{"grape":"슈냉 블랑","country":"프랑스","label_kr":"부브레 섹","label_en":"Vouvray Sec","style":"가볍거나 중간 바디, 산도 높음, 드라이","quality":"좋음~훌륭함","aroma":"청사과, 레몬, 꽃, 젖은 돌, 약간의 꿀","unique":"신선하고 산뜻한 드라이 스타일, 숙성 시 꿀, 견과류 발달","wine_type":"화이트"},{"grape":"슈냉 블랑","country":"남아공","label_kr":"웨스턴 케이프","label_en":"Western Cape","style":"중간 바디, 산도 중간~높음, 드라이~오프드라이","quality":"허용~좋음","aroma":"열대 과일, 사과, 복숭아, 시트러스, 약한 꿀","unique":"가성비 좋은 과일 중심 스타일","wine_type":"화이트"},{"grape":"세미용","country":"프랑스","label_kr":"소테른","label_en":"Sauternes","style":"풍부한 바디, 산도 중간, 스위트","quality":"훌륭함~최고","aroma":"살구, 꿀, 바닐라, 귀부균 향, 농축된 스위트","unique":"귀부병 발생, 고급 스위트 와인","wine_type":"화이트"},{"grape":"세미용","country":"호주","label_kr":"헌터 밸리","label_en":"Hunter Valley","style":"가볍거나 중간 바디, 산도 매우 높음, 드라이","quality":"좋음~훌륭함","aroma":"레몬, 풀, 신선한 허브, 꿀, 장기 숙성 시 토스트 향","unique":"장기 숙성 시 토스트, 견과류 풍미 발달","wine_type":"화이트"},{"grape":"푸르민트","country":"토카이","label_kr":"아수","label_en":"Aszú","style":"풍부한 바디, 산도 높음, 스위트","quality":"훌륭함~최고","aroma":"살구, 오렌지 껍질, 꿀, 귀부균 향, 캐러멜, 견과류","unique":"귀부병 발생, 토카이 지역의 전통적 스위트 와인","wine_type":"화이트"},{"grape":"샤르도네","country":"프랑스","label_kr":"샤블리","label_en":"Chablis","style":"가볍고 산도 높음, 드라이","quality":"좋음~훌륭함","aroma":"녹색 사과, 레몬, 젖은 돌","unique":"산도 높음, 미네랄 강조","wine_type":"화이트"},{"grape":"샤르도네","country":"프랑스","label_kr":"뫼르소","label_en":"Meursault","style":"중간~진한 바디, 산도 중간, 드라이","quality":"훌륭함","aroma":"복숭아, 버터, 너트, 오크","unique":"버터리, 견과류 풍미, 숙성 잠재력","wine_type":"화이트"},{"grape":"샤르도네","country":"미국","label_kr":"나파 밸리","label_en":"Napa Valley","style":"진한 바디, 산도 중간, 드라이","quality":"좋음~훌륭함","aroma":"복숭아, 열대 과일, 바닐라, 오크","unique":"풍부한 과일과 오크 사용","wine_type":"화이트"},{"grape":"샤르도네","country":"호주","label_kr":"애들레이드 힐스","label_en":"Adelaide Hills","style":"중간 바디, 산도 중간~높음, 드라이","quality":"좋음~훌륭함","aroma":"사과, 레몬, 시트러스, 미네랄","unique":"서늘한 기후, 산도 높음, 미네랄 풍미","wine_type":"화이트"},{"grape":"샤르도네","country":"뉴질랜드","label_kr":"말버러","label_en":"Marlborough","style":"중간 바디, 산도 중간~높음, 드라이","quality":"좋음~훌륭함","aroma":"사과, 레몬, 시트러스, 미네랄","unique":"서늘한 기후, 산도 높음, 미네랄 풍미","wine_type":"화이트"},{"grape":"샤르도네","country":"칠레","label_kr":"카사블랑카 밸리","label_en":"Casablanca Valley","style":"가볍거나 중간 바디, 산도 높음, 드라이","quality":"좋음~훌륭함","aroma":"녹색 사과, 레몬, 신선함","unique":"서늘한 기후, 산도 높음, 신선한 과일 중심","wine_type":"화이트"},{"grape":"소비뇽 블랑","country":"프랑스","label_kr":"상세르","label_en":"Sancerre","style":"가볍거나 중간 바디, 산도 높음, 드라이","quality":"좋음~훌륭함","aroma":"구스베리, 레몬, 허브, 젖은 돌, 미네랄","unique":"산도 높고 미네랄 뉘앙스","wine_type":"화이트"},{"grape":"소비뇽 블랑","country":"뉴질랜드","label_kr":"말버러","label_en":"Marlborough","style":"가볍거나 중간 바디, 산도 높음, 드라이","quality":"좋음~훌륭함","aroma":"열대 과일, 구스베리, 레몬, 강한 허브","unique":"강렬한 허브와 열대 과일, 대표적인 뉴질랜드 스타일","wine_type":"화이트"},{"grape":"소비뇽 블랑","country":"칠레","label_kr":"카사블랑카 밸리","label_en":"Casablanca Valley","style":"가볍거나 중간 바디, 산도 높음, 드라이","quality":"좋음~훌륭함","aroma":"구스베리, 레몬, 시트러스, 산뜻한 과일","unique":"서늘한 기후, 신선한 과일 중심","wine_type":"화이트"},{"grape":"소비뇽 블랑","country":"남아공","label_kr":"콘스탄시아","label_en":"Constantia","style":"가볍거나 중간 바디, 산도 높음, 드라이","quality":"좋음~훌륭함","aroma":"구스베리, 레몬, 시트러스, 시원한 스타일","unique":"서늘한 기후, 신선하고 시원한 스타일","wine_type":"화이트"},{"grape":"피노 그리지오/피노 그리","country":"이탈리아","label_kr":"프리울리-베네치아 줄리아","label_en":"Friuli-Venezia Giulia","style":"중간 바디, 산도 중간, 드라이","quality":"좋음~훌륭함","aroma":"복숭아, 사과, 배, 가볍고 부드러운 질감","unique":"더 복합적이고 풍미가 잘 발달, 품질 우수","wine_type":"화이트"},{"grape":"게뷔르츠트라미너","country":"프랑스","label_kr":"알자스","label_en":"Alsace","style":"중간~풍부한 바디, 산도 낮음, 드라이~오프드라이","quality":"좋음~훌륭함","aroma":"리치, 장미, 복숭아, 스파이스, 약한 단맛","unique":"풍부한 향, 낮은 산도, 오일리한 질감","wine_type":"화이트"},{"grape":"비오니에","country":"프랑스","label_kr":"콩드리유","label_en":"Condrieu","style":"중간~풍부한 바디, 산도 낮음, 드라이","quality":"훌륭함","aroma":"복숭아, 살구, 꽃, 스파이스, 낮은 산도","unique":"풍부한 아로마, 낮은 산도, 오일리한 질감","wine_type":"화이트"},{"grape":"알바리뇨","country":"스페인","label_kr":"리아스 바이사스","label_en":"Rías Baixas","style":"가볍거나 중간 바디, 산도 높음, 드라이","quality":"좋음~훌륭함","aroma":"레몬, 자몽, 복숭아, 신선한 과일, 미네랄","unique":"산도 높고 신선한 스타일","wine_type":"화이트"},{"grape":"메를로/카베르네 소비뇽","country":"프랑스","label_kr":"생-테밀리옹","label_en":"Saint-Émilion","style":"중간~진한 바디, 타닌 중간~높음, 드라이","quality":"좋음~훌륭함","aroma":"블랙 체리, 자두, 허브, 오크","unique":"메를로 중심, 부드럽고 숙성 잠재력","wine_type":"레드"},{"grape":"메를로/카베르네 소비뇽","country":"프랑스","label_kr":"포이약","label_en":"Pauillac","style":"진한 바디, 산도 높음, 타닌 높음, 드라이","quality":"훌륭함","aroma":"블랙 커런트, 블랙베리, 시가 박스, 오크","unique":"카베르네 소비뇽 중심, 타닌 강하고 장기 숙성","wine_type":"레드"},{"grape":"메를로/카베르네 소비뇽","country":"미국","label_kr":"나파 밸리","label_en":"Napa Valley","style":"진한 바디, 타닌 중간~높음, 드라이","quality":"좋음~훌륭함","aroma":"블랙 커런트, 자두, 바닐라, 오크","unique":"풍부한 과일, 강한 타닌, 숙성 잠재력","wine_type":"레드"},{"grape":"메를로/카베르네 소비뇽","country":"칠레","label_kr":"마이포 밸리","label_en":"Maipo Valley","style":"중간~진한 바디, 타닌 중간, 드라이","quality":"좋음","aroma":"블랙베리, 자두, 허브, 오크","unique":"신선한 과일, 약간의 허브, 좋은 품질","wine_type":"레드"},{"grape":"메를로/카베르네 소비뇽","country":"남아공","label_kr":"스텔렌보스","label_en":"Stellenbosch","style":"중간~진한 바디, 타닌 중간~높음, 드라이","quality":"좋음~훌륭함","aroma":"블랙베리, 자두, 민트, 오크","unique":"민트 뉘앙스, 부드러운 스타일","wine_type":"레드"},{"grape":"메를로/카베르네 소비뇽","country":"호주","label_kr":"마가렛 리버","label_en":"Margaret River","style":"중간~진한 바디, 타닌 중간~높음, 드라이","quality":"좋음~훌륭함","aroma":"블랙 커런트, 자두, 허브, 오크","unique":"타닌과 산도 균형 좋음, 블렌딩 중심","wine_type":"레드"},{"grape":"메를로/카베르네 소비뇽","country":"뉴질랜드","label_kr":"호크스 베이","label_en":"Hawke's Bay","style":"중간~진한 바디, 타닌 중간~높음, 드라이","quality":"좋음~훌륭함","aroma":"블랙 커런트, 자두, 허브, 오크","unique":"타닌과 산도 균형 좋음, 블렌딩 중심","wine_type":"레드"},{"grape":"시라/쉬라즈","country":"프랑스","label_kr":"코트-로티","label_en":"Côte-Rôtie","style":"진한 바디, 산도 중간, 타닌 높음, 드라이","quality":"훌륭함","aroma":"블랙베리, 블랙 올리브, 바이올렛, 스파이스, 오크","unique":"꽃향, 풍부한 타닌, 장기 숙성 가능","wine_type":"레드"},{"grape":"시라/쉬라즈","country":"호주","label_kr":"바로사 밸리","label_en":"Barossa Valley","style":"진한 바디, 산도 중간, 타닌 중간~높음, 드라이","quality":"좋음~훌륭함","aroma":"블랙베리, 초콜릿, 바닐라, 스파이스","unique":"풍부한 과일, 농축된 스타일, 오크 사용","wine_type":"레드"},{"grape":"가메","country":"프랑스","label_kr":"보졸레","label_en":"Beaujolais","style":"가벼운 바디, 산도 중간~높음, 타닌 낮음, 드라이","quality":"허용~좋음","aroma":"라즈베리, 체리, 바나나, 캔디 풍미","unique":"탄산 침용으로 인한 바나나, 캔디 풍미","wine_type":"레드"},{"grape":"그르나슈/가르나차","country":"프랑스","label_kr":"샤토뇌프-뒤-파프","label_en":"Châteauneuf-du-Pape","style":"진한 바디, 산도 중간, 타닌 중간~높음, 드라이","quality":"훌륭함","aroma":"블랙베리, 허브, 스파이스, 토양, 오크","unique":"풍부하고 복합적인 향, 장기 숙성 가능","wine_type":"레드"},{"grape":"그르나슈/가르나차","country":"스페인","label_kr":"프리오랏","label_en":"Priorat","style":"진한 바디, 산도 중간, 타닌 중간~높음, 드라이","quality":"훌륭함","aroma":"블랙베리, 블랙 체리, 스파이스, 미네랄","unique":"풍부한 과일, 미네랄, 복합성 뛰어남","wine_type":"레드"},{"grape":"템프라니요","country":"스페인","label_kr":"리오하","label_en":"Rioja","style":"중간~진한 바디, 산도 중간~높음, 타닌 중간~높음, 드라이","quality":"좋음~훌륭함","aroma":"레드 체리, 딸기, 바닐라, 코코넛, 오크 숙성","unique":"오크 숙성의 대표적 스타일, 복합성 발달","wine_type":"레드"},{"grape":"템프라니요","country":"스페인","label_kr":"리베라 델 두에로","label_en":"Ribera del Duero","style":"중간~진한 바디, 산도 중간~높음, 타닌 중간~높음, 드라이","quality":"좋음~훌륭함","aroma":"블랙 체리, 플럼, 오크, 농축된 과일","unique":"농축된 과일 풍미, 구조감 뛰어남","wine_type":"레드"},{"grape":"카르메네르","country":"칠레","label_kr":"센트럴 밸리","label_en":"Central Valley","style":"중간 바디, 산도 중간, 타닌 중간, 드라이","quality":"허용~좋음","aroma":"블랙베리, 자두, 부드러운 타닌, 과일 중심","unique":"가성비 좋은 과일 중심의 쉽게 마시는 스타일","wine_type":"레드"},{"grape":"말벡","country":"아르헨티나","label_kr":"멘도사","label_en":"Mendoza","style":"진한 바디, 산도 중간, 타닌 중간~높음, 드라이","quality":"좋음~훌륭함","aroma":"블랙베리, 블랙 체리, 초콜릿, 오크, 농축된 과일","unique":"풍부한 과일과 타닌, 숙성 잠재력 있음","wine_type":"레드"},{"grape":"피노타지","country":"남아공","label_kr":"웨스턴 케이프","label_en":"Western Cape","style":"중간~진한 바디, 산도 중간, 타닌 중간, 드라이","quality":"좋음~훌륭함","aroma":"블랙 체리, 라즈베리, 커피, 스모키, 초콜릿","unique":"고유한 커피, 스모키, 과일 풍미의 조화","wine_type":"레드"},{"grape":"코르테제","country":"이탈리아","label_kr":"가비","label_en":"Gavi","style":"가벼운 바디, 산도 높음, 드라이","quality":"좋음","aroma":"레몬, 청사과, 아몬드, 미네랄","unique":"신선하고 산뜻한 이탈리아 화이트","wine_type":"화이트"},{"grape":"가르가네가","country":"이탈리아","label_kr":"소아베","label_en":"Soave","style":"가벼운 바디, 산도 중간~높음, 드라이","quality":"좋음","aroma":"사과, 배, 흰꽃, 아몬드","unique":"산뜻하고 가벼운 이탈리아 화이트","wine_type":"화이트"},{"grape":"네비올로","country":"이탈리아","label_kr":"바롤로","label_en":"Barolo","style":"진한 바디, 산도 높음, 타닌 높음, 드라이","quality":"훌륭함","aroma":"블랙 체리, 자두, 장미, 오크, 가죽","unique":"장기 숙성 가능, 강한 타닌","wine_type":"레드"},{"grape":"산지오베제","country":"이탈리아","label_kr":"브루넬로 디 몬탈치노","label_en":"Brunello di Montalcino","style":"진한 바디, 산도 높음, 드라이","quality":"훌륭함","aroma":"블랙 체리, 건조 과일, 오크, 담배","unique":"장기 숙성, 복합성, 강한 타닌","wine_type":"레드"},{"grape":"코르비나","country":"이탈리아","label_kr":"아마로네 델라 발폴리첼라","label_en":"Amarone della Valpolicella","style":"진한 바디, 산도 중간, 타닌 높음, 드라이","quality":"좋음~훌륭함","aroma":"건포도, 블랙 체리, 초콜릿, 오크","unique":"농축된 스타일, 건포도 풍미","wine_type":"레드"},{"grape":"샴페인 블렌드","country":"프랑스","label_kr":"샴페인","label_en":"Champagne","style":"가벼운~중간 바디, 산도 높음, 드라이","quality":"좋음~훌륭함","aroma":"레몬, 사과, 브리오슈","unique":"복합적인 브리오슈 풍미, 질감 좋음","wine_type":"스파클링"},{"grape":"카바 블렌드","country":"스페인","label_kr":"카바","label_en":"Cava","style":"가벼운~중간 바디, 산도 중간, 드라이","quality":"좋음","aroma":"사과, 레몬, 토스트","unique":"가성비 좋은 스파클링","wine_type":"스파클링"},{"grape":"케이프 블렌드","country":"남아공","label_kr":"캡 클라시크","label_en":"Cap Classique","style":"중간 바디, 산도 중간, 드라이","quality":"좋음~훌륭함","aroma":"복숭아, 구운 견과류","unique":"풍미가 더 복합적인 스파클링","wine_type":"스파클링"},{"grape":"모스카토","country":"이탈리아","label_kr":"아스티","label_en":"Asti","style":"가벼운 바디, 산도 높음, 스위트","quality":"허용~좋음","aroma":"사과, 살구, 꽃, 낮은 알코올","unique":"낮은 알코올, 스위트 스파클링","wine_type":"스파클링"},{"grape":"글레라","country":"이탈리아","label_kr":"프로세코","label_en":"Prosecco","style":"가벼운 바디, 산도 중간, 드라이","quality":"허용~좋음","aroma":"배, 사과, 꽃, 신선한 스타일","unique":"산뜻하고 쉽게 마시는 스파클링","wine_type":"스파클링"},{"grape":"팔로미노","country":"스페인","label_kr":"피노","label_en":"Fino","style":"가벼운 바디, 산도 높음, 드라이","quality":"좋음","aroma":"녹색 올리브, 아몬드, 효모","unique":"산도 높고 신선한 셰리","wine_type":"주정강화(셰리)"},{"grape":"팔로미노","country":"스페인","label_kr":"올로로소","label_en":"Oloroso","style":"중간~진한 바디, 산도 중간, 드라이","quality":"좋음","aroma":"호두, 스파이스, 말린 과일","unique":"산화 숙성, 풍부한 견과류 풍미","wine_type":"주정강화(셰리)"},{"grape":"투리가 나시오날","country":"포르투갈","label_kr":"빈티지","label_en":"Vintage","style":"진한 바디, 산도 중간, 스위트","quality":"훌륭함","aroma":"블랙베리, 체리, 건포도, 스위트","unique":"장기 숙성 포트","wine_type":"주정강화(포트)"},{"grape":"투리가 나시오날","country":"포르투갈","label_kr":"토니 20년","label_en":"Tawny 20 Years Old","style":"가벼운~중간 바디, 산도 중간, 스위트","quality":"좋음","aroma":"견과류, 건조 과일, 캐러멜","unique":"더 깊은 견과류와 캐러멜 풍미","wine_type":"주정강화(포트)"}];
+const RAW = [{"grape": "피노 누아", "country": "프랑스", "label_kr": "부르고뉴", "label_en": "Bourgogne", "style": "가볍고 산도 높음, 신선한 붉은 과일, 타닌 부드러움", "quality": "좋음~훌륭함", "aroma": "붉은 체리, 라즈베리, 가벼운 흙 향", "unique": "가볍고 산도 높아 신선한 느낌 강조", "wine_type": "레드"}, {"grape": "피노 누아", "country": "프랑스", "label_kr": "빌라주", "label_en": "Village", "style": "가볍고 산도 높음, 붉은 과일 풍부, 더 많은 복합성", "quality": "좋음~훌륭함", "aroma": "붉은 체리, 라즈베리, 약한 오크 풍미", "unique": "더 농축된 과일향과 복합성", "wine_type": "레드"}, {"grape": "피노 누아", "country": "프랑스", "label_kr": "제브레-샹베르탕", "label_en": "Gevrey-Chambertin", "style": "중간 바디, 복합적, 붉은 과일, 흙, 타닌 존재", "quality": "좋음~훌륭함", "aroma": "붉은 체리, 블랙 체리, 흙, 향신료", "unique": "흙과 향신료가 분명, 숙성 잠재력 있음", "wine_type": "레드"}, {"grape": "피노 누아", "country": "프랑스", "label_kr": "뉘-생-조르주", "label_en": "Nuits-Saint-Georges", "style": "중간~진한 바디, 붉은 과일, 향신료, 타닌 뚜렷함", "quality": "좋음~훌륭함", "aroma": "붉은 체리, 라즈베리, 향신료, 가죽", "unique": "강한 향신료와 가죽 뉘앙스", "wine_type": "레드"}, {"grape": "피노 누아", "country": "프랑스", "label_kr": "본", "label_en": "Beaune", "style": "가볍고 산도 높음, 붉은 과일, 부드러운 타닌", "quality": "좋음~훌륭함", "aroma": "붉은 체리, 라즈베리, 은은한 흙 향", "unique": "부드럽고 산뜻한 붉은 과일 중심", "wine_type": "레드"}, {"grape": "피노 누아", "country": "프랑스", "label_kr": "포마르", "label_en": "Pommard", "style": "중간~진한 바디, 타닌 높음, 붉은 과일, 향신료", "quality": "좋음~훌륭함", "aroma": "블랙 체리, 자두, 향신료, 타닌 뚜렷함", "unique": "타닌 강하며 구조감 뚜렷함", "wine_type": "레드"}, {"grape": "피노 누아", "country": "프랑스", "label_kr": "프리미에 크뤼", "label_en": "Premier Cru", "style": "중간~진한 바디, 복합적, 숙성 잠재력, 타닌 뚜렷함", "quality": "훌륭함", "aroma": "붉은 체리, 블랙 체리, 향신료, 흙, 오크 풍미", "unique": "숙성 시 복합적인 향과 풍미 발달", "wine_type": "레드"}, {"grape": "피노 누아", "country": "프랑스", "label_kr": "그랑 크뤼", "label_en": "Grand Cru", "style": "진한 바디, 복합적, 숙성 잠재력, 타닌 많음, 붉은 과일, 흙", "quality": "훌륭함~최고", "aroma": "붉은 과일, 흙, 향신료, 오크, 복합적인 풍미", "unique": "가장 뛰어난 품질, 장기 숙성 가능", "wine_type": "레드"}, {"grape": "피노 누아", "country": "미국", "label_kr": "로스 카네로스", "label_en": "Los Carneros", "style": "가볍고 산도 중간~높음, 붉은 과일, 약한 오크", "quality": "좋음~훌륭함", "aroma": "딸기, 라즈베리, 붉은 자두, 가벼운 오크", "unique": "서늘한 기후 영향, 산도 높고 과일이 선명", "wine_type": "레드"}, {"grape": "피노 누아", "country": "미국", "label_kr": "소노마", "label_en": "Sonoma", "style": "가볍거나 중간 바디, 붉은 과일, 부드러운 타닌", "quality": "좋음~훌륭함", "aroma": "딸기, 붉은 자두, 라즈베리, 약한 오크", "unique": "온화한 기후, 부드럽고 쉽게 접근 가능", "wine_type": "레드"}, {"grape": "피노 누아", "country": "미국", "label_kr": "산타 바바라 카운티", "label_en": "Santa Barbara County", "style": "가볍고 산도 높음, 붉은 과일, 산뜻한 스타일", "quality": "좋음", "aroma": "라즈베리, 체리, 크랜베리, 산뜻한 스타일", "unique": "신선하고 가벼운 붉은 과일, 상쾌함", "wine_type": "레드"}, {"grape": "피노 누아", "country": "미국", "label_kr": "오리건", "label_en": "Oregon", "style": "가볍거나 중간 바디, 붉은 과일, 산도 높음, 약한 오크", "quality": "좋음~훌륭함", "aroma": "라즈베리, 체리, 붉은 자두, 향신료", "unique": "서늘한 기후, 산도 높고 우아한 스타일", "wine_type": "레드"}, {"grape": "피노 누아", "country": "칠레", "label_kr": "카사블랑카 밸리", "label_en": "Casablanca Valley", "style": "가볍고 산도 높음, 신선한 붉은 과일, 산뜻한 스타일", "quality": "좋음", "aroma": "라즈베리, 체리, 크랜베리, 산뜻하고 신선함", "unique": "서늘한 해양성 기후, 산뜻하고 과일 주도형", "wine_type": "레드"}, {"grape": "피노 누아", "country": "칠레", "label_kr": "워커베이", "label_en": "Walker Bay", "style": "가볍고 산도 높음, 붉은 과일, 약한 오크", "quality": "좋음", "aroma": "라즈베리, 체리, 은은한 향신료", "unique": "서늘한 해양성 기후, 약한 오크와 신선함", "wine_type": "레드"}, {"grape": "피노 누아", "country": "호주", "label_kr": "야라 밸리", "label_en": "Yarra Valley", "style": "가볍거나 중간 바디, 산도 높음, 붉은 과일, 약한 오크", "quality": "좋음~훌륭함", "aroma": "라즈베리, 체리, 크랜베리, 향신료", "unique": "산도 높고 향신료 뉘앙스, 고급 스타일", "wine_type": "레드"}, {"grape": "피노 누아", "country": "호주", "label_kr": "모닝턴 페닌 슐라", "label_en": "Mornington Peninsula", "style": "가볍거나 중간 바디, 산도 높음, 붉은 과일, 향신료", "quality": "좋음~훌륭함", "aroma": "체리, 라즈베리, 향신료, 부드러운 오크", "unique": "복합적인 향신료, 고급 스타일, 숙성 가능", "wine_type": "레드"}, {"grape": "피노 누아", "country": "뉴질랜드", "label_kr": "마틴버러", "label_en": "Martinborough", "style": "중간 바디, 산도 높음, 붉은 과일, 약한 오크", "quality": "좋음~훌륭함", "aroma": "체리, 라즈베리, 붉은 자두, 약한 오크", "unique": "풍부한 과일향, 산도 균형 좋음", "wine_type": "레드"}, {"grape": "피노 누아", "country": "뉴질랜드", "label_kr": "말버러", "label_en": "Marlborough", "style": "가볍고 산도 높음, 신선한 붉은 과일, 부드러운 타닌", "quality": "좋음", "aroma": "라즈베리, 체리, 크랜베리, 부드러운 타닌", "unique": "가볍고 산뜻한 스타일, 부드러운 타닌", "wine_type": "레드"}, {"grape": "피노 누아", "country": "뉴질랜드", "label_kr": "센트럴 오타고", "label_en": "Central Otago", "style": "중간 바디, 풍부한 붉은 과일, 산도 높음, 타닌 부드러움", "quality": "좋음~훌륭함", "aroma": "붉은 자두, 라즈베리, 크랜베리, 풍부한 과일", "unique": "풍부하고 농축된 과일, 산도 높고 구조 좋음", "wine_type": "레드"}, {"grape": "진판델/ 프리미티보", "country": "미국", "label_kr": "캘리포니아 화이트 진판델", "label_en": "California White Zinfandel", "style": "연한 핑크색, 가볍고 달콤함, 산도 중간", "quality": "허용~좋음", "aroma": "딸기, 라즈베리, 캔디, 약한 산도", "unique": "가볍고 달콤한 로제 스타일, 쉬운 음용", "wine_type": "로제"}, {"grape": "진판델/ 프리미티보", "country": "미국", "label_kr": "캘리포니아 올드 바인 진판델", "label_en": "California Old Vine Zinfandel", "style": "진한 바디, 높은 알코올, 타닌 중간~높음", "quality": "좋음~훌륭함", "aroma": "블랙베리, 자두, 건포도, 바닐라, 향신료", "unique": "농축된 과일 풍미, 숙성 잠재력 있음", "wine_type": "레드"}, {"grape": "진판델/ 프리미티보", "country": "이탈리아", "label_kr": "풀리아", "label_en": "Puglia", "style": "중간~진한 바디, 타닌 중간, 산도 중간", "quality": "허용~좋음", "aroma": "블랙 체리, 자두, 향신료, 약간의 달콤한 과일 풍미", "unique": "가격 대비 훌륭한 품질, 과일 중심의 부드러운 스타일", "wine_type": "레드"}, {"grape": "리슬링", "country": "독일", "label_kr": "모젤", "label_en": "Mosel", "style": "가볍고 산도 매우 높음, 저알코올, 드라이~오프드라이", "quality": "좋음~훌륭함", "aroma": "청사과, 라임, 꽃, 젖은 돌, 꿀 (숙성 시 석유향)", "unique": "가볍고 매우 섬세한 스타일, 석유향 발달", "wine_type": "화이트"}, {"grape": "리슬링", "country": "독일", "label_kr": "라인가우", "label_en": "Rheingau", "style": "중간 바디, 산도 높음, 드라이~오프드라이", "quality": "좋음~훌륭함", "aroma": "복숭아, 살구, 꽃, 약간의 꿀, 석유향 (숙성 시)", "unique": "더 풍부하고 구조감 있는 드라이 스타일", "wine_type": "화이트"}, {"grape": "리슬링", "country": "독일", "label_kr": "팔츠", "label_en": "Pfalz", "style": "중간 바디, 산도 높음, 드라이~오프드라이", "quality": "좋음~훌륭함", "aroma": "복숭아, 살구, 레몬, 꽃, 꿀, 석유향 (숙성 시)", "unique": "따뜻한 지역, 더 무게감 있고 복합적", "wine_type": "화이트"}, {"grape": "리슬링", "country": "독일", "label_kr": "카비넬", "label_en": "Kabinett", "style": "가볍고 산도 높음, 드라이~오프드라이", "quality": "좋음~훌륭함", "aroma": "청사과, 라임, 복숭아, 가벼운 꿀, 꽃", "unique": "가벼운 바디, 상쾌하고 쉬운 음용", "wine_type": "화이트"}, {"grape": "리슬링", "country": "독일", "label_kr": "슈페트레제", "label_en": "Spätlese", "style": "중간 바디, 산도 높음, 드라이~미디엄", "quality": "좋음~훌륭함", "aroma": "복숭아, 살구, 꿀, 꽃, 농축된 과일", "unique": "농축된 과일 풍미, 당도 느껴짐", "wine_type": "화이트"}, {"grape": "리슬링", "country": "독일", "label_kr": "아우스레제", "label_en": "Auslese", "style": "중간~풍부한 바디, 산도 높음, 미디엄~스위트", "quality": "좋음~훌륭함", "aroma": "잘 익은 복숭아, 살구, 꿀, 꽃, 풍부한 과일", "unique": "스위트 스타일, 복합적인 과일 향", "wine_type": "화이트"}, {"grape": "리슬링", "country": "독일", "label_kr": "아이스바인", "label_en": "Eiswein", "style": "중간 바디, 산도 매우 높음, 스위트", "quality": "훌륭함", "aroma": "청사과, 라임, 꽃, 꿀, 농축된 과일, 고농도 당도", "unique": "귀부병 없는 천연 아이스와인, 산도 높음", "wine_type": "화이트"}, {"grape": "리슬링", "country": "독일", "label_kr": "베렌아우스레제", "label_en": "Beerenauslese", "style": "풍부한 바디, 산도 높음, 스위트", "quality": "훌륭함~최고", "aroma": "살구, 망고, 꿀, 귀부균향, 복합적인 스위트 와인", "unique": "귀부병 발생, 고급 스위트 와인, 농축미", "wine_type": "화이트"}, {"grape": "리슬링", "country": "독일", "label_kr": "트로켄베렌아우스레제", "label_en": "Trockenbeerenauslese", "style": "풍부한 바디, 산도 높음, 매우 달콤함", "quality": "최고", "aroma": "말린 살구, 꿀, 귀부균향, 농축된 당도, 복합성 최고", "unique": "귀부병 발생, 매우 고농축 스위트 와인", "wine_type": "화이트"}, {"grape": "리슬링", "country": "프랑스", "label_kr": "알자스", "label_en": "Alsace", "style": "중간~풍부한 바디, 산도 높음, 드라이", "quality": "좋음~훌륭함", "aroma": "복숭아, 살구, 꽃, 약한 꿀, 스파이시함 (숙성 시 석유향)", "unique": "드라이 스타일, 복합적이고 숙성 잠재력", "wine_type": "화이트"}, {"grape": "리슬링", "country": "호주", "label_kr": "에덴 밸리", "label_en": "Eden Valley", "style": "가볍거나 중간 바디, 산도 매우 높음, 드라이", "quality": "좋음~훌륭함", "aroma": "라임, 레몬, 꽃, 미네랄, 석유향 (숙성 시)", "unique": "산도 매우 높고 신선한 라임향, 드라이", "wine_type": "화이트"}, {"grape": "리슬링", "country": "호주", "label_kr": "클레어 밸리", "label_en": "Clare Valley", "style": "가볍거나 중간 바디, 산도 매우 높음, 드라이", "quality": "좋음~훌륭함", "aroma": "라임, 레몬, 꽃, 미네랄, 석유향 (숙성 시)", "unique": "산도 매우 높고 신선한 라임향, 드라이", "wine_type": "화이트"}, {"grape": "슈냉 블랑", "country": "프랑스", "label_kr": "부브레 섹", "label_en": "Vouvray Sec", "style": "가볍거나 중간 바디, 산도 높음, 드라이", "quality": "좋음~훌륭함", "aroma": "청사과, 레몬, 꽃, 젖은 돌, 약간의 꿀", "unique": "신선하고 산뜻한 드라이 스타일, 숙성 시 꿀, 견과류 발달", "wine_type": "화이트"}, {"grape": "슈냉 블랑", "country": "프랑스", "label_kr": "부브레 드미 섹", "label_en": "Vouvray Demi-Sec", "style": "중간 바디, 산도 높음, 오프드라이~미디엄", "quality": "좋음~훌륭함", "aroma": "청사과, 구운 사과, 꿀, 꽃, 약한 스위트", "unique": "오프드라이~미디엄 스타일, 숙성 시 복합적인 꿀, 견과류 향 발달", "wine_type": "화이트"}, {"grape": "슈냉 블랑", "country": "남아공", "label_kr": "웨스턴 케이프", "label_en": "Western Cape", "style": "중간 바디, 산도 중간~높음, 드라이~오프드라이", "quality": "허용~좋음", "aroma": "열대 과일, 사과, 복숭아, 시트러스, 약한 꿀", "unique": "가성비 좋은 과일 중심 스타일, 드라이~오프드라이, 쉽게 마실 수 있음", "wine_type": "화이트"}, {"grape": "세미용", "country": "프랑스", "label_kr": "보르도", "label_en": "Bordeaux", "style": "중간 바디, 산도 중간, 드라이", "quality": "좋음", "aroma": "사과, 레몬, 풀, 약한 오크, 산뜻함", "unique": "종종 소비뇽 블랑과 블렌딩, 신선하고 드라이", "wine_type": "화이트"}, {"grape": "세미용", "country": "프랑스", "label_kr": "소테른", "label_en": "Sauternes", "style": "풍부한 바디, 산도 중간, 스위트", "quality": "훌륭함~최고", "aroma": "살구, 꿀, 바닐라, 귀부균 향, 농축된 스위트", "unique": "귀부병 발생, 고급 스위트 와인, 농축미, 숙성 잠재력", "wine_type": "화이트"}, {"grape": "세미용", "country": "호주", "label_kr": "헌터 밸리", "label_en": "Hunter Valley", "style": "가볍거나 중간 바디, 산도 매우 높음, 드라이", "quality": "좋음~훌륭함", "aroma": "레몬, 풀, 신선한 허브, 꿀, 장기 숙성 시 토스트 향", "unique": "장기 숙성 시 토스트, 견과류 풍미 발달, 고산도 드라이 스타일", "wine_type": "화이트"}, {"grape": "세미용", "country": "호주", "label_kr": "바로사 밸리", "label_en": "Barossa Valley", "style": "중간~진한 바디, 산도 중간, 드라이", "quality": "좋음~훌륭함", "aroma": "복숭아, 레몬, 꿀, 약한 오크, 장기 숙성 시 견과류, 토스트 향", "unique": "풍부하고 복합적인 드라이 스타일, 숙성 시 꿀, 견과류 향 발달", "wine_type": "화이트"}, {"grape": "푸르민트 Furmint", "country": "토카이", "label_kr": "아수", "label_en": "Aszú", "style": "풍부한 바디, 산도 높음, 스위트", "quality": "훌륭함~최고", "aroma": "살구, 오렌지 껍질, 꿀, 귀부균 향, 캐러멜, 견과류", "unique": "귀부병 발생, 토카이 지역의 전통적 스위트 와인, 장기 숙성 가능, 복합성 뛰어남", "wine_type": "화이트"}, {"grape": "샤르도네", "country": "프랑스", "label_kr": "부르고뉴", "label_en": "Bourgogne", "style": "가볍거나 중간 바디, 산도 중간~높음, 드라이", "quality": "좋음~훌륭함", "aroma": "사과, 레몬, 버터, 약한 오크", "unique": "산도 중간, 신선한 과일, 약한 오크", "wine_type": "화이트"}, {"grape": "샤르도네", "country": "프랑스", "label_kr": "샤블리", "label_en": "Chablis", "style": "가볍고 산도 높음, 드라이", "quality": "좋음~훌륭함", "aroma": "녹색 사과, 레몬, 젖은 돌", "unique": "산도 높음, 미네랄 강조", "wine_type": "화이트"}, {"grape": "샤르도네", "country": "프랑스", "label_kr": "뫼르소", "label_en": "Meursault", "style": "중간~진한 바디, 산도 중간, 드라이", "quality": "훌륭함", "aroma": "복숭아, 버터, 너트, 오크", "unique": "버터리, 견과류 풍미, 숙성 잠재력", "wine_type": "화이트"}, {"grape": "샤르도네", "country": "프랑스", "label_kr": "퓔리니-몽라셰", "label_en": "Puligny-Montrachet", "style": "중간~진한 바디, 산도 중간, 드라이", "quality": "훌륭함", "aroma": "복숭아, 버터, 너트, 오크", "unique": "복합적, 오크, 숙성 잠재력", "wine_type": "화이트"}, {"grape": "샤르도네", "country": "프랑스", "label_kr": "샤샤뉴-몽라셰", "label_en": "Chassagne-Montrachet", "style": "중간~진한 바디, 산도 중간, 드라이", "quality": "훌륭함", "aroma": "복숭아, 버터, 너트, 오크", "unique": "복합적, 오크, 숙성 잠재력", "wine_type": "화이트"}, {"grape": "샤르도네", "country": "프랑스", "label_kr": "마콩", "label_en": "Mâcon", "style": "가볍거나 중간 바디, 산도 중간, 드라이", "quality": "좋음", "aroma": "사과, 레몬, 약한 오크", "unique": "가성비 좋은 부르고뉴 스타일", "wine_type": "화이트"}, {"grape": "샤르도네", "country": "프랑스", "label_kr": "푸이-퓌세", "label_en": "Pouilly-Fuissé", "style": "중간 바디, 산도 중간, 드라이", "quality": "좋음~훌륭함", "aroma": "복숭아, 시트러스, 오크", "unique": "미네랄과 오크 균형, 좋은 품질", "wine_type": "화이트"}, {"grape": "샤르도네", "country": "프랑스", "label_kr": "페이 독", "label_en": "Pays d'Oc", "style": "중간 바디, 산도 중간, 드라이", "quality": "허용~좋음", "aroma": "복숭아, 열대 과일, 약한 오크", "unique": "가격 대비 풍부한 과일, 쉬운 음용", "wine_type": "화이트"}, {"grape": "샤르도네", "country": "미국", "label_kr": "캘리포니아", "label_en": "California", "style": "중간~진한 바디, 산도 중간, 드라이", "quality": "좋음~훌륭함", "aroma": "복숭아, 열대 과일, 바닐라, 오크", "unique": "풍부한 과일과 오크 사용", "wine_type": "화이트"}, {"grape": "샤르도네", "country": "미국", "label_kr": "로스 카네로스", "label_en": "Los Carneros", "style": "중간~진한 바디, 산도 중간, 드라이", "quality": "좋음~훌륭함", "aroma": "복숭아, 열대 과일, 바닐라, 오크", "unique": "서늘한 기후, 신선함과 오크의 균형", "wine_type": "화이트"}, {"grape": "샤르도네", "country": "미국", "label_kr": "소노마", "label_en": "Sonoma", "style": "중간 바디, 산도 중간, 드라이", "quality": "좋음~훌륭함", "aroma": "복숭아, 레몬, 오크", "unique": "부드럽고 쉽게 접근 가능", "wine_type": "화이트"}, {"grape": "샤르도네", "country": "미국", "label_kr": "나파 밸리", "label_en": "Napa Valley", "style": "진한 바디, 산도 중간, 드라이", "quality": "좋음~훌륭함", "aroma": "복숭아, 열대 과일, 바닐라, 오크", "unique": "풍부한 과일과 오크 사용", "wine_type": "화이트"}, {"grape": "샤르도네", "country": "미국", "label_kr": "산타 바바라 카운티", "label_en": "Santa Barbara County", "style": "중간 바디, 산도 중간, 드라이", "quality": "좋음", "aroma": "복숭아, 레몬, 약한 오크", "unique": "서늘한 기후, 신선한 과일 중심", "wine_type": "화이트"}, {"grape": "샤르도네", "country": "미국", "label_kr": "오리건", "label_en": "Oregon", "style": "가볍거나 중간 바디, 산도 중간~높음, 드라이", "quality": "좋음~훌륭함", "aroma": "사과, 레몬, 시트러스, 약한 오크", "unique": "서늘한 기후, 산도 중간~높음", "wine_type": "화이트"}, {"grape": "샤르도네", "country": "호주", "label_kr": "사우스 이스턴 오스트레일리아", "label_en": "South Eastern Australia", "style": "중간 바디, 산도 중간, 드라이", "quality": "허용~좋음", "aroma": "복숭아, 열대 과일, 바닐라, 오크", "unique": "가성비 좋은 따뜻한 지역 스타일", "wine_type": "화이트"}, {"grape": "샤르도네", "country": "호주", "label_kr": "애들레이드 힐스", "label_en": "Adelaide Hills", "style": "중간 바디, 산도 중간~높음, 드라이", "quality": "좋음~훌륭함", "aroma": "사과, 레몬, 시트러스, 미네랄", "unique": "서늘한 기후, 산도 높음, 미네랄 풍미", "wine_type": "화이트"}, {"grape": "샤르도네", "country": "호주", "label_kr": "야라 밸리", "label_en": "Yarra Valley", "style": "중간 바디, 산도 중간~높음, 드라이", "quality": "좋음~훌륭함", "aroma": "사과, 레몬, 시트러스, 미네랄", "unique": "서늘한 기후, 산도 높음, 미네랄 풍미", "wine_type": "화이트"}, {"grape": "샤르도네", "country": "호주", "label_kr": "마가렛 리버", "label_en": "Margaret River", "style": "중간 바디, 산도 중간~높음, 드라이", "quality": "좋음~훌륭함", "aroma": "사과, 레몬, 시트러스, 미네랄", "unique": "서늘한 기후, 산도 높음, 미네랄 풍미", "wine_type": "화이트"}, {"grape": "샤르도네", "country": "뉴질랜드", "label_kr": "말버러", "label_en": "Marlborough", "style": "중간 바디, 산도 중간~높음, 드라이", "quality": "좋음~훌륭함", "aroma": "사과, 레몬, 시트러스, 미네랄", "unique": "서늘한 기후, 산도 높음, 미네랄 풍미", "wine_type": "화이트"}, {"grape": "샤르도네", "country": "뉴질랜드", "label_kr": "호크스 베이", "label_en": "Hawke's Bay", "style": "중간 바디, 산도 중간, 드라이", "quality": "좋음", "aroma": "복숭아, 레몬, 약한 오크", "unique": "따뜻한 기후, 부드러운 과일 중심", "wine_type": "화이트"}, {"grape": "샤르도네", "country": "칠레", "label_kr": "카사블랑카 밸리", "label_en": "Casablanca Valley", "style": "가볍거나 중간 바디, 산도 높음, 드라이", "quality": "좋음~훌륭함", "aroma": "녹색 사과, 레몬, 신선함", "unique": "서늘한 기후, 산도 높음, 신선한 과일 중심", "wine_type": "화이트"}, {"grape": "샤르도네", "country": "칠레", "label_kr": "센트럴 밸리", "label_en": "Central Valley", "style": "중간 바디, 산도 중간, 드라이", "quality": "허용~좋음", "aroma": "복숭아, 열대 과일, 약한 오크", "unique": "따뜻한 기후, 부드러운 과일 중심", "wine_type": "화이트"}, {"grape": "샤르도네", "country": "남아공", "label_kr": "웨스턴 케이프", "label_en": "Western Cape", "style": "중간 바디, 산도 중간, 드라이", "quality": "허용~좋음", "aroma": "복숭아, 열대 과일, 약한 오크", "unique": "따뜻한 기후, 부드러운 과일 중심", "wine_type": "화이트"}, {"grape": "샤르도네", "country": "남아공", "label_kr": "워커 베이", "label_en": "Walker Bay", "style": "중간 바디, 산도 높음, 드라이", "quality": "좋음~훌륭함", "aroma": "사과, 레몬, 시트러스, 미네랄", "unique": "서늘한 기후, 산도 높음, 신선한 과일 중심", "wine_type": "화이트"}, {"grape": "소비뇽 블랑", "country": "프랑스", "label_kr": "상세르", "label_en": "Sancerre", "style": "가볍거나 중간 바디, 산도 높음, 드라이", "quality": "좋음~훌륭함", "aroma": "구스베리, 레몬, 허브, 젖은 돌, 미네랄", "unique": "산도 높고 미네랄 뉘앙스, 구스베리와 허브 뚜렷함", "wine_type": "화이트"}, {"grape": "소비뇽 블랑", "country": "프랑스", "label_kr": "푸이-퓌메", "label_en": "Pouilly-Fumé", "style": "가볍거나 중간 바디, 산도 높음, 드라이", "quality": "좋음~훌륭함", "aroma": "구스베리, 레몬, 허브, 스모키, 젖은 돌", "unique": "스모키 뉘앙스, 미네랄과 구스베리 풍미", "wine_type": "화이트"}, {"grape": "소비뇽 블랑", "country": "프랑스", "label_kr": "투렌", "label_en": "Touraine", "style": "가볍거나 중간 바디, 산도 높음, 드라이", "quality": "좋음", "aroma": "구스베리, 레몬, 허브, 꽃, 시트러스", "unique": "가성비 좋은 루아르 밸리 스타일", "wine_type": "화이트"}, {"grape": "소비뇽 블랑", "country": "프랑스", "label_kr": "보르도", "label_en": "Bordeaux", "style": "가볍거나 중간 바디, 산도 중간~높음, 드라이", "quality": "좋음", "aroma": "구스베리, 레몬, 허브, 약한 오크", "unique": "소비뇽 블랑-세미용 블렌딩, 산도 중간", "wine_type": "화이트"}, {"grape": "소비뇽 블랑", "country": "프랑스", "label_kr": "그라브", "label_en": "Graves", "style": "중간 바디, 산도 중간~높음, 드라이", "quality": "좋음~훌륭함", "aroma": "구스베리, 레몬, 허브, 약한 오크, 복합성", "unique": "세미용 블렌딩, 오크 사용, 복합성", "wine_type": "화이트"}, {"grape": "소비뇽 블랑", "country": "프랑스", "label_kr": "페삭-레오냥", "label_en": "Pessac-Léognan", "style": "중간 바디, 산도 중간~높음, 드라이", "quality": "좋음~훌륭함", "aroma": "구스베리, 레몬, 허브, 오크 사용, 복합성", "unique": "세미용 블렌딩, 오크 사용, 장기 숙성 가능", "wine_type": "화이트"}, {"grape": "소비뇽 블랑", "country": "프랑스", "label_kr": "페이 독", "label_en": "Pays d'Oc", "style": "가볍거나 중간 바디, 산도 중간, 드라이", "quality": "허용~좋음", "aroma": "열대 과일, 복숭아, 구스베리, 레몬", "unique": "가성비 좋은 과일 중심의 쉬운 음용 스타일", "wine_type": "화이트"}, {"grape": "소비뇽 블랑", "country": "뉴질랜드", "label_kr": "말버러", "label_en": "Marlborough", "style": "가볍거나 중간 바디, 산도 높음, 드라이", "quality": "좋음~훌륭함", "aroma": "열대 과일, 구스베리, 레몬, 강한 허브", "unique": "강렬한 허브와 열대 과일, 대표적인 뉴질랜드 스타일", "wine_type": "화이트"}, {"grape": "소비뇽 블랑", "country": "호주", "label_kr": "마가렛 리버", "label_en": "Margaret River", "style": "중간 바디, 산도 중간~높음, 드라이", "quality": "좋음~훌륭함", "aroma": "구스베리, 레몬, 허브, 약한 오크", "unique": "세미용 블렌딩, 오크 사용, 부드러운 스타일", "wine_type": "화이트"}, {"grape": "소비뇽 블랑", "country": "호주", "label_kr": "애들레이드 힐스", "label_en": "Adelaide Hills", "style": "가볍거나 중간 바디, 산도 높음, 드라이", "quality": "좋음~훌륭함", "aroma": "구스베리, 레몬, 허브, 시트러스, 미네랄", "unique": "서늘한 기후, 신선함, 미네랄 중심", "wine_type": "화이트"}, {"grape": "소비뇽 블랑", "country": "칠레", "label_kr": "카사블랑카 밸리", "label_en": "Casablanca Valley", "style": "가볍거나 중간 바디, 산도 높음, 드라이", "quality": "좋음~훌륭함", "aroma": "구스베리, 레몬, 시트러스, 산뜻한 과일", "unique": "서늘한 기후, 신선한 과일 중심, 가벼운 바디", "wine_type": "화이트"}, {"grape": "소비뇽 블랑", "country": "칠레", "label_kr": "센트럴 밸리", "label_en": "Central Valley", "style": "가볍거나 중간 바디, 산도 중간, 드라이", "quality": "허용~좋음", "aroma": "구스베리, 레몬, 열대 과일, 부드러운 과일", "unique": "따뜻한 기후, 과일 중심의 부드러운 스타일", "wine_type": "화이트"}, {"grape": "소비뇽 블랑", "country": "남아공", "label_kr": "콘스탄시아", "label_en": "Constantia", "style": "가볍거나 중간 바디, 산도 높음, 드라이", "quality": "좋음~훌륭함", "aroma": "구스베리, 레몬, 시트러스, 시원한 스타일", "unique": "서늘한 기후, 신선하고 시원한 스타일", "wine_type": "화이트"}, {"grape": "소비뇽 블랑", "country": "남아공", "label_kr": "엘긴", "label_en": "Elgin", "style": "가볍거나 중간 바디, 산도 높음, 드라이", "quality": "좋음~훌륭함", "aroma": "구스베리, 레몬, 시트러스, 신선한 과일", "unique": "서늘한 기후, 산도 높고 신선한 과일 중심", "wine_type": "화이트"}, {"grape": "소비뇽 블랑", "country": "미국", "label_kr": "나파 밸리", "label_en": "Napa Valley", "style": "중간 바디, 산도 중간, 드라이", "quality": "좋음~훌륭함", "aroma": "열대 과일, 구스베리, 레몬, 약한 오크", "unique": "따뜻한 기후, 부드럽고 열대 과일 중심", "wine_type": "화이트"}, {"grape": "피노 그리지오/ 피노 그리", "country": "이탈리아", "label_kr": "델레 베네찌에", "label_en": "Delle Venezie", "style": "가볍고 산도 높음, 드라이", "quality": "허용~좋음", "aroma": "레몬, 사과, 배, 단순하고 신선함", "unique": "가볍고 산도 높아 쉽게 마시는 스타일", "wine_type": "화이트"}, {"grape": "피노 그리지오/ 피노 그리", "country": "이탈리아", "label_kr": "베네토", "label_en": "Veneto", "style": "가볍거나 중간 바디, 산도 중간~높음, 드라이", "quality": "허용~좋음", "aroma": "레몬, 사과, 배, 가볍고 산뜻함", "unique": "가성비 좋은 가볍고 신선한 스타일", "wine_type": "화이트"}, {"grape": "피노 그리지오/ 피노 그리", "country": "이탈리아", "label_kr": "프리울리-베네치아 줄리아", "label_en": "Friuli-Venezia Giulia", "style": "중간 바디, 산도 중간, 드라이", "quality": "좋음~훌륭함", "aroma": "복숭아, 사과, 배, 가볍고 부드러운 질감", "unique": "더 복합적이고 풍미가 잘 발달, 품질 우수", "wine_type": "화이트"}, {"grape": "피노 그리지오/ 피노 그리", "country": "프랑스", "label_kr": "알자스", "label_en": "Alsace", "style": "중간~풍부한 바디, 산도 중간, 드라이~오프드라이", "quality": "좋음~훌륭함", "aroma": "복숭아, 사과, 배, 스파이스, 풍부한 과일", "unique": "알자스 지역, 바디 풍부, 향신료 뉘앙스", "wine_type": "화이트"}, {"grape": "피노 그리지오/ 피노 그리", "country": "프랑스", "label_kr": "알자스 그랑 크뤼", "label_en": "Alsace Grand Cru", "style": "중간~풍부한 바디, 산도 중간, 드라이~오프드라이", "quality": "좋음~훌륭함", "aroma": "복숭아, 사과, 배, 스파이스, 복합성 발달", "unique": "알자스 그랑 크뤼, 복합성 뛰어나고 숙성 잠재력", "wine_type": "화이트"}, {"grape": "피노 그리지오/ 피노 그리", "country": "프랑스", "label_kr": "방당주 타르디브", "label_en": "Vendanges Tardives", "style": "풍부한 바디, 산도 중간, 미디엄~스위트", "quality": "훌륭함", "aroma": "살구, 꿀, 스파이스, 건조 과일, 스위트 스타일", "unique": "늦은 수확, 풍부한 스위트 와인, 고품질", "wine_type": "화이트"}, {"grape": "게뷔르츠트라미너", "country": "프랑스", "label_kr": "알자스", "label_en": "Alsace", "style": "중간~풍부한 바디, 산도 낮음, 드라이~오프드라이", "quality": "좋음~훌륭함", "aroma": "리치, 장미, 복숭아, 스파이스, 약한 단맛", "unique": "풍부한 향, 낮은 산도, 오일리한 질감", "wine_type": "화이트"}, {"grape": "게뷔르츠트라미너", "country": "프랑스", "label_kr": "알자스 그랑 크뤼", "label_en": "Alsace Grand Cru", "style": "중간~풍부한 바디, 산도 낮음, 드라이~오프드라이", "quality": "좋음~훌륭함", "aroma": "리치, 장미, 복숭아, 스파이스, 복합성 뛰어남", "unique": "복합성 뛰어나며, 장기 숙성 시 꿀과 향신료 발달", "wine_type": "화이트"}, {"grape": "비오니에 Viognier", "country": "프랑스", "label_kr": "콩드리유", "label_en": "Condrieu", "style": "중간~풍부한 바디, 산도 낮음, 드라이", "quality": "훌륭함", "aroma": "복숭아, 살구, 꽃, 스파이스, 낮은 산도", "unique": "풍부한 아로마, 낮은 산도, 오일리한 질감, 고급 비오니에", "wine_type": "화이트"}, {"grape": "알바리뇨 Albariño", "country": "스페인", "label_kr": "리아스 바이사스", "label_en": "Rías Baixas", "style": "가볍거나 중간 바디, 산도 높음, 드라이", "quality": "좋음~훌륭함", "aroma": "레몬, 자몽, 복숭아, 신선한 과일, 미네랄", "unique": "산도 높고 신선한 스타일, 바다와 잘 어울리는 가벼운 화이트 와인", "wine_type": "화이트"}, {"grape": "메를로/ 카베르네 소비뇽", "country": "프랑스", "label_kr": "보르도", "label_en": "Bordeaux", "style": "중간 바디, 산도 중간~높음, 타닌 중간, 드라이", "quality": "좋음", "aroma": "블랙베리, 자두, 허브, 담배", "unique": "산도 중간~높음, 타닌 부드럽고 신선한 스타일", "wine_type": "레드"}, {"grape": "메를로/ 카베르네 소비뇽", "country": "프랑스", "label_kr": "보르도 수페리외르", "label_en": "Bordeaux Supérieur", "style": "중간 바디, 산도 중간~높음, 타닌 중간, 드라이", "quality": "좋음", "aroma": "블랙베리, 자두, 허브, 담배", "unique": "산도 중간~높음, 타닌 부드럽고 신선한 스타일", "wine_type": "레드"}, {"grape": "메를로/ 카베르네 소비뇽", "country": "프랑스", "label_kr": "생-테밀리옹", "label_en": "Saint-Émilion", "style": "중간~진한 바디, 타닌 중간~높음, 드라이", "quality": "좋음~훌륭함", "aroma": "블랙 체리, 자두, 허브, 오크", "unique": "메를로 중심, 부드럽고 숙성 잠재력", "wine_type": "레드"}, {"grape": "메를로/ 카베르네 소비뇽", "country": "프랑스", "label_kr": "포므롤", "label_en": "Pomerol", "style": "중간~진한 바디, 타닌 중간, 드라이", "quality": "좋음~훌륭함", "aroma": "블랙 체리, 자두, 초콜릿, 오크", "unique": "메를로 중심, 부드럽고 향신료 풍미", "wine_type": "레드"}, {"grape": "메를로/ 카베르네 소비뇽", "country": "프랑스", "label_kr": "오-메독", "label_en": "Haut-Médoc", "style": "진한 바디, 산도 높음, 타닌 높음, 드라이", "quality": "좋음~훌륭함", "aroma": "블랙 커런트, 블랙베리, 오크, 시가 박스", "unique": "카베르네 소비뇽 중심, 타닌 강하고 숙성 잠재력", "wine_type": "레드"}, {"grape": "메를로/ 카베르네 소비뇽", "country": "프랑스", "label_kr": "마고", "label_en": "Margaux", "style": "진한 바디, 산도 높음, 타닌 높음, 드라이", "quality": "훌륭함", "aroma": "블랙 커런트, 블랙베리, 꽃, 오크", "unique": "카베르네 소비뇽 중심, 향기로운 스타일", "wine_type": "레드"}, {"grape": "메를로/ 카베르네 소비뇽", "country": "프랑스", "label_kr": "포이약", "label_en": "Pauillac", "style": "진한 바디, 산도 높음, 타닌 높음, 드라이", "quality": "훌륭함", "aroma": "블랙 커런트, 블랙베리, 시가 박스, 오크", "unique": "카베르네 소비뇽 중심, 타닌 강하고 장기 숙성", "wine_type": "레드"}, {"grape": "메를로/ 카베르네 소비뇽", "country": "프랑스", "label_kr": "그라브", "label_en": "Graves", "style": "중간 바디, 산도 중간~높음, 타닌 중간, 드라이", "quality": "좋음", "aroma": "블랙베리, 자두, 허브, 약한 오크", "unique": "메를로 중심, 부드럽고 쉽게 마실 수 있음", "wine_type": "레드"}, {"grape": "메를로/ 카베르네 소비뇽", "country": "프랑스", "label_kr": "페삭-레오냥", "label_en": "Pessac-Léognan", "style": "중간~진한 바디, 산도 중간~높음, 타닌 중간~높음, 드라이", "quality": "좋음~훌륭함", "aroma": "블랙베리, 자두, 흙, 오크, 복합성", "unique": "블렌딩 중심, 타닌과 산도 균형 좋음", "wine_type": "레드"}, {"grape": "메를로/ 카베르네 소비뇽", "country": "프랑스", "label_kr": "페이 독", "label_en": "Pays d'Oc", "style": "가볍거나 중간 바디, 타닌 낮음~중간, 드라이", "quality": "허용~좋음", "aroma": "레드 과일, 블랙베리, 부드러운 타닌", "unique": "가성비 좋은 과일 중심의 부드러운 스타일", "wine_type": "레드"}, {"grape": "메를로/ 카베르네 소비뇽", "country": "미국", "label_kr": "캘리포니아", "label_en": "California", "style": "중간~진한 바디, 타닌 중간~높음, 드라이", "quality": "좋음~훌륭함", "aroma": "블랙베리, 자두, 바닐라, 오크", "unique": "과일 풍부, 부드러운 타닌, 오크 사용", "wine_type": "레드"}, {"grape": "메를로/ 카베르네 소비뇽", "country": "미국", "label_kr": "나파 밸리", "label_en": "Napa Valley", "style": "진한 바디, 타닌 중간~높음, 드라이", "quality": "좋음~훌륭함", "aroma": "블랙 커런트, 자두, 바닐라, 오크", "unique": "풍부한 과일, 강한 타닌, 숙성 잠재력", "wine_type": "레드"}, {"grape": "메를로/ 카베르네 소비뇽", "country": "미국", "label_kr": "소노마", "label_en": "Sonoma", "style": "중간~진한 바디, 타닌 중간, 드라이", "quality": "좋음~훌륭함", "aroma": "블랙베리, 자두, 바닐라, 오크", "unique": "부드러운 타닌, 쉽게 접근 가능", "wine_type": "레드"}, {"grape": "메를로/ 카베르네 소비뇽", "country": "미국", "label_kr": "오크빌", "label_en": "Oakville", "style": "진한 바디, 타닌 높음, 드라이", "quality": "훌륭함", "aroma": "블랙 커런트, 자두, 오크, 시가 박스", "unique": "타닌 강하고, 숙성 시 복합성 발달", "wine_type": "레드"}, {"grape": "메를로/ 카베르네 소비뇽", "country": "미국", "label_kr": "러더퍼드", "label_en": "Rutherford", "style": "진한 바디, 타닌 높음, 드라이", "quality": "훌륭함", "aroma": "블랙 커런트, 자두, 오크, 먼지", "unique": "더블 러더포드 더스트 특성, 타닌 강함", "wine_type": "레드"}, {"grape": "메를로/ 카베르네 소비뇽", "country": "미국", "label_kr": "칼리스토가", "label_en": "Calistoga", "style": "진한 바디, 타닌 높음, 드라이", "quality": "훌륭함", "aroma": "블랙 커런트, 자두, 농축된 과일, 오크", "unique": "농축된 과일, 타닌 강하고 숙성 잠재력", "wine_type": "레드"}, {"grape": "메를로/ 카베르네 소비뇽", "country": "칠레", "label_kr": "센트럴 밸리", "label_en": "Central Valley", "style": "가볍거나 중간 바디, 타닌 중간, 드라이", "quality": "허용~좋음", "aroma": "블랙베리, 자두, 부드러운 타닌", "unique": "가볍고 과일 중심, 쉽게 접근 가능", "wine_type": "레드"}, {"grape": "메를로/ 카베르네 소비뇽", "country": "칠레", "label_kr": "마이포 밸리", "label_en": "Maipo Valley", "style": "중간~진한 바디, 타닌 중간, 드라이", "quality": "좋음", "aroma": "블랙베리, 자두, 허브, 오크", "unique": "신선한 과일, 약간의 허브, 좋은 품질", "wine_type": "레드"}, {"grape": "메를로/ 카베르네 소비뇽", "country": "칠레", "label_kr": "콜차구아 밸리", "label_en": "Colchagua Valley", "style": "중간~진한 바디, 타닌 중간, 드라이", "quality": "좋음", "aroma": "블랙베리, 자두, 허브, 오크", "unique": "신선한 과일, 약간의 허브, 좋은 품질", "wine_type": "레드"}, {"grape": "메를로/ 카베르네 소비뇽", "country": "남아공", "label_kr": "스텔렌보스", "label_en": "Stellenbosch", "style": "중간~진한 바디, 타닌 중간~높음, 드라이", "quality": "좋음~훌륭함", "aroma": "블랙베리, 자두, 민트, 오크", "unique": "민트 뉘앙스, 부드러운 스타일", "wine_type": "레드"}, {"grape": "메를로/ 카베르네 소비뇽", "country": "남아공", "label_kr": "케이프 블렌드", "label_en": "Cape Blend", "style": "중간~진한 바디, 타닌 중간~높음, 드라이", "quality": "좋음~훌륭함", "aroma": "블랙베리, 자두, 민트, 오크", "unique": "민트 뉘앙스, 부드러운 스타일", "wine_type": "레드"}, {"grape": "메를로/ 카베르네 소비뇽", "country": "남아공", "label_kr": "쿠나와라", "label_en": "Coonawarra", "style": "중간~진한 바디, 타닌 중간~높음, 드라이", "quality": "좋음~훌륭함", "aroma": "블랙 커런트, 민트, 오크", "unique": "민트, 담배, 강한 타닌, 숙성 잠재력", "wine_type": "레드"}, {"grape": "메를로/ 카베르네 소비뇽", "country": "호주", "label_kr": "마가렛 리버", "label_en": "Margaret River", "style": "중간~진한 바디, 타닌 중간~높음, 드라이", "quality": "좋음~훌륭함", "aroma": "블랙 커런트, 자두, 허브, 오크", "unique": "타닌과 산도 균형 좋음, 블렌딩 중심", "wine_type": "레드"}, {"grape": "메를로/ 카베르네 소비뇽", "country": "뉴질랜드", "label_kr": "호크스 베이", "label_en": "Hawke's Bay", "style": "중간~진한 바디, 타닌 중간~높음, 드라이", "quality": "좋음~훌륭함", "aroma": "블랙 커런트, 자두, 허브, 오크", "unique": "타닌과 산도 균형 좋음, 블렌딩 중심", "wine_type": "레드"}, {"grape": "시라/쉬라즈", "country": "프랑스", "label_kr": "코트-로티", "label_en": "Côte-Rôtie", "style": "진한 바디, 산도 중간, 타닌 높음, 드라이", "quality": "훌륭함", "aroma": "블랙베리, 블랙 올리브, 바이올렛, 스파이스, 오크", "unique": "꽃향, 풍부한 타닌, 장기 숙성 가능", "wine_type": "레드"}, {"grape": "시라/쉬라즈", "country": "프랑스", "label_kr": "에르미타주", "label_en": "Hermitage", "style": "진한 바디, 산도 중간, 타닌 높음, 드라이", "quality": "훌륭함", "aroma": "블랙베리, 스파이스, 초콜릿, 오크", "unique": "구조감 뛰어나며, 장기 숙성 가능", "wine_type": "레드"}, {"grape": "시라/쉬라즈", "country": "프랑스", "label_kr": "크로즈-에르미타주", "label_en": "Crozes-Hermitage", "style": "중간~진한 바디, 산도 중간, 타닌 중간~높음, 드라이", "quality": "좋음~훌륭함", "aroma": "블랙베리, 후추, 스파이스, 약한 오크", "unique": "접근성 좋고 과일 중심, 부드러운 타닌", "wine_type": "레드"}, {"grape": "시라/쉬라즈", "country": "프랑스", "label_kr": "미네르부아", "label_en": "Minervois", "style": "중간 바디, 산도 중간, 타닌 중간, 드라이", "quality": "좋음", "aroma": "블랙베리, 라벤더, 허브, 약한 스파이스", "unique": "가성비 좋은 쉬라즈, 과일 중심", "wine_type": "레드"}, {"grape": "시라/쉬라즈", "country": "프랑스", "label_kr": "페이 독", "label_en": "Pays d'Oc", "style": "가볍거나 중간 바디, 산도 중간, 타닌 낮음~중간, 드라이", "quality": "허용~좋음", "aroma": "블랙베리, 레드 체리, 부드러운 스파이스", "unique": "가볍고 부드러우며 쉽게 마시는 스타일", "wine_type": "레드"}, {"grape": "시라/쉬라즈", "country": "호주", "label_kr": "사우스 이스턴 오스트레일리아", "label_en": "South Eastern Australia", "style": "중간~진한 바디, 산도 중간, 타닌 중간~높음, 드라이", "quality": "허용~좋음", "aroma": "블랙베리, 자두, 후추, 스파이스", "unique": "따뜻한 지역, 과일 풍부, 후추 뉘앙스", "wine_type": "레드"}, {"grape": "시라/쉬라즈", "country": "호주", "label_kr": "바로사 밸리", "label_en": "Barossa Valley", "style": "진한 바디, 산도 중간, 타닌 중간~높음, 드라이", "quality": "좋음~훌륭함", "aroma": "블랙베리, 초콜릿, 바닐라, 스파이스", "unique": "풍부한 과일, 농축된 스타일, 오크 사용", "wine_type": "레드"}, {"grape": "시라/쉬라즈", "country": "호주", "label_kr": "헌터 밸리", "label_en": "Hunter Valley", "style": "중간 바디, 산도 중간, 타닌 중간, 드라이", "quality": "좋음", "aroma": "레드 과일, 블랙베리, 스파이스, 가벼운 타닌", "unique": "상대적으로 부드러운 쉬라즈, 산뜻한 스타일", "wine_type": "레드"}, {"grape": "가메", "country": "프랑스", "label_kr": "보졸레", "label_en": "Beaujolais", "style": "가벼운 바디, 산도 중간~높음, 타닌 낮음, 드라이", "quality": "허용~좋음", "aroma": "라즈베리, 체리, 바나나, 캔디 풍미", "unique": "탄산 침용으로 인한 바나나, 캔디 풍미, 가벼운 스타일", "wine_type": "레드"}, {"grape": "가메", "country": "프랑스", "label_kr": "보졸레 빌라주", "label_en": "Beaujolais Villages", "style": "가벼운 바디, 산도 중간~높음, 타닌 낮음, 드라이", "quality": "좋음", "aroma": "라즈베리, 체리, 붉은 자두, 은은한 스파이스", "unique": "과일 향 중심, 더 집중된 맛, 부드러운 타닌", "wine_type": "레드"}, {"grape": "가메", "country": "프랑스", "label_kr": "플뢰리", "label_en": "Fleurie", "style": "가벼운 바디, 산도 중간~높음, 타닌 낮음, 드라이", "quality": "좋음~훌륭함", "aroma": "라즈베리, 체리, 꽃향, 은은한 스파이스", "unique": "꽃향과 과일 향이 복합적, 더 긴 여운", "wine_type": "레드"}, {"grape": "그르나슈/가르나차", "country": "프랑스", "label_kr": "코트 뒤 론", "label_en": "Côtes du Rhône", "style": "중간~진한 바디, 산도 중간, 타닌 중간, 드라이", "quality": "좋음", "aroma": "딸기, 라즈베리, 허브, 흙, 스파이스", "unique": "과일 중심, 쉽게 마시는 스타일", "wine_type": "레드"}, {"grape": "그르나슈/가르나차", "country": "프랑스", "label_kr": "코트 뒤 론 빌라주", "label_en": "Côtes du Rhône Villages", "style": "중간~진한 바디, 산도 중간, 타닌 중간, 드라이", "quality": "좋음~훌륭함", "aroma": "딸기, 라즈베리, 허브, 흙, 스파이스", "unique": "더 집중된 과일, 허브, 약간의 복합성", "wine_type": "레드"}, {"grape": "그르나슈/가르나차", "country": "프랑스", "label_kr": "샤토뇌프-뒤-파프", "label_en": "Châteauneuf-du-Pape", "style": "진한 바디, 산도 중간, 타닌 중간~높음, 드라이", "quality": "훌륭함", "aroma": "블랙베리, 허브, 스파이스, 토양, 오크", "unique": "풍부하고 복합적인 향, 장기 숙성 가능", "wine_type": "레드"}, {"grape": "그르나슈/가르나차", "country": "프랑스", "label_kr": "랑그독=루시용", "label_en": "Languedoc-Roussillon", "style": "중간 바디, 산도 중간, 타닌 중간, 드라이", "quality": "허용~좋음", "aroma": "딸기, 라즈베리, 허브, 스파이스", "unique": "가성비 좋은 과일 중심, 쉬운 스타일", "wine_type": "레드"}, {"grape": "그르나슈/가르나차", "country": "프랑스", "label_kr": "프로방스", "label_en": "Provence", "style": "중간 바디, 산도 중간, 타닌 중간, 드라이", "quality": "좋음", "aroma": "딸기, 라즈베리, 허브, 스파이스", "unique": "프로방스 허브 향, 과일 중심, 부드러운 타닌", "wine_type": "레드"}, {"grape": "그르나슈/가르나차", "country": "프랑스", "label_kr": "미네르부아", "label_en": "Minervois", "style": "중간 바디, 산도 중간, 타닌 중간, 드라이", "quality": "좋음", "aroma": "딸기, 라즈베리, 허브, 스파이스", "unique": "부드럽고 과일 향이 풍부한 스타일", "wine_type": "레드"}, {"grape": "그르나슈/가르나차", "country": "프랑스", "label_kr": "코트 드 프로방스", "label_en": "Côtes de Provence", "style": "가벼운 바디, 산도 중간, 타닌 낮음, 드라이 (로제)", "quality": "좋음", "aroma": "딸기, 체리, 산뜻한 과일, 가벼운 스파이스 (로제)", "unique": "가벼운 바디, 산뜻하고 신선한 로제 와인", "wine_type": "레드"}, {"grape": "그르나슈/가르나차", "country": "스페인", "label_kr": "리오하", "label_en": "Rioja", "style": "중간~진한 바디, 산도 중간, 타닌 중간, 드라이", "quality": "좋음~훌륭함", "aroma": "레드 체리, 딸기, 바닐라, 코코넛", "unique": "오크 숙성, 바닐라와 코코넛 풍미", "wine_type": "레드"}, {"grape": "그르나슈/가르나차", "country": "스페인", "label_kr": "나바라", "label_en": "Navarra", "style": "중간~진한 바디, 산도 중간, 타닌 중간, 드라이", "quality": "좋음", "aroma": "딸기, 라즈베리, 허브, 부드러운 오크", "unique": "과일 중심, 부드러운 타닌, 쉽게 마시는 스타일", "wine_type": "레드"}, {"grape": "그르나슈/가르나차", "country": "스페인", "label_kr": "프리오랏", "label_en": "Priorat", "style": "진한 바디, 산도 중간, 타닌 중간~높음, 드라이", "quality": "훌륭함", "aroma": "블랙베리, 블랙 체리, 스파이스, 미네랄", "unique": "풍부한 과일, 미네랄, 복합성 뛰어남", "wine_type": "레드"}, {"grape": "그르나슈/가르나차", "country": "호주", "label_kr": "바로사 밸리", "label_en": "Barossa Valley", "style": "진한 바디, 산도 중간, 타닌 중간~높음, 드라이", "quality": "좋음~훌륭함", "aroma": "블랙베리, 블랙 체리, 스파이스, 초콜릿", "unique": "농축된 과일, 스파이스, 부드러운 타닌", "wine_type": "레드"}, {"grape": "그르나슈/가르나차", "country": "호주", "label_kr": "맥라렌 베일", "label_en": "McLaren Vale", "style": "진한 바디, 산도 중간, 타닌 중간~높음, 드라이", "quality": "좋음~훌륭함", "aroma": "블랙베리, 블랙 체리, 스파이스, 초콜릿", "unique": "농축된 과일, 스파이스, 부드러운 타닌", "wine_type": "레드"}, {"grape": "템프라니요", "country": "스페인", "label_kr": "카탈루냐", "label_en": "Catalunya", "style": "중간~진한 바디, 산도 중간, 타닌 중간, 드라이", "quality": "허용~좋음", "aroma": "레드 체리, 딸기, 부드러운 오크, 쉬운 스타일", "unique": "가성비 좋은 과일 중심의 스타일", "wine_type": "레드"}, {"grape": "템프라니요", "country": "스페인", "label_kr": "리오하", "label_en": "Rioja", "style": "중간~진한 바디, 산도 중간~높음, 타닌 중간~높음, 드라이", "quality": "좋음~훌륭함", "aroma": "레드 체리, 딸기, 바닐라, 코코넛, 오크 숙성", "unique": "오크 숙성의 대표적 스타일, 복합성 발달", "wine_type": "레드"}, {"grape": "템프라니요", "country": "스페인", "label_kr": "리베라 델 두에로", "label_en": "Ribera del Duero", "style": "중간~진한 바디, 산도 중간~높음, 타닌 중간~높음, 드라이", "quality": "좋음~훌륭함", "aroma": "블랙 체리, 플럼, 오크, 농축된 과일", "unique": "농축된 과일 풍미, 구조감 뛰어남", "wine_type": "레드"}, {"grape": "템프라니요", "country": "스페인", "label_kr": "호벤", "label_en": "Joven", "style": "가볍거나 중간 바디, 산도 중간, 타닌 낮음, 드라이", "quality": "허용~좋음", "aroma": "신선한 레드 과일, 부드러운 타닌, 과일 중심", "unique": "빠른 소비용, 과일 중심, 부드러운 스타일", "wine_type": "레드"}, {"grape": "템프라니요", "country": "스페인", "label_kr": "크리안자", "label_en": "Crianza", "style": "중간~진한 바디, 산도 중간~높음, 타닌 중간~높음, 드라이", "quality": "좋음~훌륭함", "aroma": "레드 체리, 딸기, 바닐라, 약간의 가죽, 오크 숙성", "unique": "오크 숙성 후 과일과 약간의 가죽 향 균형", "wine_type": "레드"}, {"grape": "템프라니요", "country": "스페인", "label_kr": "레세르바", "label_en": "Reserva", "style": "진한 바디, 산도 중간~높음, 타닌 중간~높음, 드라이", "quality": "좋음~훌륭함", "aroma": "블랙 체리, 건조 과일, 바닐라, 가죽, 복합성", "unique": "장기 숙성에 적합, 복합성 발달", "wine_type": "레드"}, {"grape": "템프라니요", "country": "스페인", "label_kr": "그란 레세르바", "label_en": "Gran Reserva", "style": "중간~진한 바디, 산도 중간~높음, 타닌 중간~높음, 드라이", "quality": "좋음~훌륭함", "aroma": "건조 과일, 견과류, 가죽, 담배, 복합성", "unique": "장기 숙성 후 견과류, 담배 등 복합적인 숙성 향", "wine_type": "레드"}, {"grape": "카르메네르 Carménère", "country": "칠레", "label_kr": "센트럴 밸리", "label_en": "Central Valley", "style": "중간 바디, 산도 중간, 타닌 중간, 드라이", "quality": "허용~좋음", "aroma": "블랙베리, 자두, 부드러운 타닌, 과일 중심", "unique": "가성비 좋은 과일 중심의 쉽게 마시는 스타일", "wine_type": "레드"}, {"grape": "말벡 Malbec", "country": "아르헨티나", "label_kr": "멘도사", "label_en": "Mendoza", "style": "진한 바디, 산도 중간, 타닌 중간~높음, 드라이", "quality": "좋음~훌륭함", "aroma": "블랙베리, 블랙 체리, 초콜릿, 오크, 농축된 과일", "unique": "풍부한 과일과 타닌, 숙성 잠재력 있음", "wine_type": "레드"}, {"grape": "피노타지 Pinotage", "country": "남아공", "label_kr": "웨스턴 케이프", "label_en": "Western Cape", "style": "중간~진한 바디, 산도 중간, 타닌 중간, 드라이", "quality": "좋음~훌륭함", "aroma": "블랙 체리, 라즈베리, 커피, 스모키, 초콜릿", "unique": "고유한 커피, 스모키, 과일 풍미의 조화", "wine_type": "레드"}, {"grape": "코르테제 Cortese", "country": "이탈리아", "label_kr": "가비", "label_en": "Gavi", "style": "중간~진한 바디, 산도 중간, 타닌 중간, 드라이", "quality": "좋음~훌륭함", "aroma": "블랙 체리, 라즈베리, 커피, 스파이스, 스모키", "unique": "다양한 품종 블렌딩으로 복합성 부여, 피노타지 주도", "wine_type": "화이트"}, {"grape": "가르가네가 Garganega", "country": "이탈리아", "label_kr": "소아베", "label_en": "Soave", "style": "가벼운 바디, 산도 중간~높음, 드라이", "quality": "좋음", "aroma": "사과, 배, 흰꽃, 아몬드", "unique": "산뜻하고 가벼운 이탈리아 화이트", "wine_type": "화이트"}, {"grape": "가르가네가 Garganega", "country": "이탈리아", "label_kr": "소아베 클라시코", "label_en": "Soave Classico", "style": "중간 바디, 산도 중간~높음, 드라이", "quality": "좋음", "aroma": "사과, 배, 흰꽃, 미네랄", "unique": "더 집중된 미네랄리티", "wine_type": "화이트"}, {"grape": "가르가네가 Garganega", "country": "이탈리아", "label_kr": "레치오토 디 소아베", "label_en": "Recioto di Soave", "style": "중간 바디, 산도 중간, 스위트", "quality": "좋음~훌륭함", "aroma": "건포도, 말린 과일, 스위트 스파이스", "unique": "스위트 화이트 와인, 집중된 풍미", "wine_type": "화이트"}, {"grape": "베르디키오 Verdicchio", "country": "이탈리아", "label_kr": "베르디키오 데이 카스텔리 디 예지", "label_en": "Verdicchio dei Castelli di Jesi", "style": "중간 바디, 산도 높음, 드라이", "quality": "좋음", "aroma": "레몬, 녹색 사과, 미네랄", "unique": "상큼한 산도, 신선한 스타일", "wine_type": "화이트"}, {"grape": "피아노 Fiano", "country": "이탈리아", "label_kr": "피아노 디 아벨리노", "label_en": "Fiano di Avellino", "style": "중간~진한 바디, 산도 중간, 드라이", "quality": "좋음", "aroma": "복숭아, 파인애플, 견과류", "unique": "부드러운 질감, 복합성", "wine_type": "화이트"}, {"grape": "네비올로 Nebbiolo", "country": "이탈리아", "label_kr": "바롤로", "label_en": "Barolo", "style": "진한 바디, 산도 높음, 타닌 높음, 드라이", "quality": "훌륭함", "aroma": "블랙 체리, 자두, 장미, 오크, 가죽", "unique": "장기 숙성 가능, 강한 타닌", "wine_type": "레드"}, {"grape": "네비올로 Nebbiolo", "country": "이탈리아", "label_kr": "바르바레스코", "label_en": "Barbaresco", "style": "진한 바디, 산도 높음, 타닌 높음, 드라이", "quality": "훌륭함", "aroma": "블랙 체리, 자두, 장미, 오크, 가죽", "unique": "장기 숙성 가능, 강한 타닌", "wine_type": "레드"}, {"grape": "바르베라 Barbera", "country": "이탈리아", "label_kr": "바르베라 다스티", "label_en": "Barbera d'Asti", "style": "중간 바디, 산도 중간, 드라이", "quality": "좋음", "aroma": "체리, 라즈베리, 스파이스", "unique": "부드럽고 과일 중심", "wine_type": "레드"}, {"grape": "코르비나 Corvina", "country": "이탈리아", "label_kr": "발폴리첼라", "label_en": "Valpolicella", "style": "가벼운 바디, 산도 중간, 드라이", "quality": "허용~좋음", "aroma": "체리, 라즈베리, 허브", "unique": "가벼운 레드 와인, 쉽게 접근 가능", "wine_type": "레드"}, {"grape": "코르비나 Corvina", "country": "이탈리아", "label_kr": "발폴리첼라 클라시코", "label_en": "Valpolicella Classico", "style": "가벼운 바디, 산도 중간, 드라이", "quality": "좋음", "aroma": "체리, 라즈베리, 허브", "unique": "조금 더 집중된 과일", "wine_type": "레드"}, {"grape": "코르비나 Corvina", "country": "이탈리아", "label_kr": "아마로네 델라 발폴리첼라", "label_en": "Amarone della Valpolicella", "style": "진한 바디, 산도 중간, 타닌 높음, 드라이", "quality": "좋음~훌륭함", "aroma": "건포도, 블랙 체리, 초콜릿, 오크", "unique": "농축된 스타일, 건포도 풍미", "wine_type": "레드"}, {"grape": "코르비나 Corvina", "country": "이탈리아", "label_kr": "레치오토 델라 발폴리첼라", "label_en": "Recioto della Valpolicella", "style": "중간~진한 바디, 산도 중간, 스위트", "quality": "좋음~훌륭함", "aroma": "건포도, 스위트 스파이스, 초콜릿", "unique": "스위트 레드 와인, 말린 과일", "wine_type": "레드"}, {"grape": "산지오베제 Sangiovese", "country": "이탈리아", "label_kr": "키안티", "label_en": "Chianti", "style": "중간 바디, 산도 중간, 드라이", "quality": "좋음", "aroma": "체리, 토마토잎, 허브", "unique": "허브와 체리, 가벼운 타닌", "wine_type": "레드"}, {"grape": "산지오베제 Sangiovese", "country": "이탈리아", "label_kr": "키안티 클라시코", "label_en": "Chianti Classico", "style": "중간 바디, 산도 중간, 드라이", "quality": "좋음", "aroma": "체리, 토마토잎, 허브", "unique": "허브와 체리, 약간 더 구조적", "wine_type": "레드"}, {"grape": "산지오베제 Sangiovese", "country": "이탈리아", "label_kr": "키안티 클라시코 리제르바", "label_en": "Chianti Classico Riserva", "style": "진한 바디, 산도 중간, 드라이", "quality": "좋음~훌륭함", "aroma": "체리, 건조 과일, 오크, 가죽", "unique": "복합적인 오크 풍미, 숙성 잠재력", "wine_type": "레드"}, {"grape": "산지오베제 Sangiovese", "country": "이탈리아", "label_kr": "브루넬로 디 몬탈치노", "label_en": "Brunello di Montalcino", "style": "진한 바디, 산도 높음, 드라이", "quality": "훌륭함", "aroma": "블랙 체리, 건조 과일, 오크, 담배", "unique": "장기 숙성, 복합성, 강한 타닌", "wine_type": "레드"}, {"grape": "몬테풀치아노 Montepulciano", "country": "이탈리아", "label_kr": "몬테풀치아노 다브루쪼", "label_en": "Montepulciano d'Abruzzo", "style": "중간~진한 바디, 산도 중간, 드라이", "quality": "좋음", "aroma": "블랙 체리, 자두, 허브", "unique": "부드러운 질감, 쉽게 접근 가능", "wine_type": "레드"}, {"grape": "몬테풀치아노 Montepulciano", "country": "프랑스", "label_kr": "샴페인", "label_en": "Champagne", "style": "가벼운~중간 바디, 산도 높음, 드라이", "quality": "좋음~훌륭함", "aroma": "레몬, 사과, 브리오슈", "unique": "복합적인 브리오슈 풍미, 질감 좋음", "wine_type": "스파클링"}, {"grape": "몬테풀치아노 Montepulciano", "country": "프랑스", "label_kr": "논-빈티지", "label_en": "Non-Vintage", "style": "가벼운~중간 바디, 산도 높음, 드라이", "quality": "좋음", "aroma": "레몬, 사과, 브리오슈", "unique": "신선하고 가벼운 샴페인", "wine_type": "스파클링"}, {"grape": "몬테풀치아노 Montepulciano", "country": "프랑스", "label_kr": "빈티지 샴페인", "label_en": "Vintage Champagne", "style": "진한 바디, 산도 높음, 드라이", "quality": "훌륭함", "aroma": "건조 과일, 토스트, 브리오슈", "unique": "풍부하고 복합적인 샴페인", "wine_type": "스파클링"}, {"grape": "몬테풀치아노 Montepulciano", "country": "스페인", "label_kr": "카바", "label_en": "Cava", "style": "가벼운~중간 바디, 산도 중간, 드라이", "quality": "좋음", "aroma": "사과, 레몬, 토스트", "unique": "가성비 좋은 스파클링", "wine_type": "스파클링"}, {"grape": "몬테풀치아노 Montepulciano", "country": "남아공", "label_kr": "캡 클라시크", "label_en": "Cap Classique", "style": "중간 바디, 산도 중간, 드라이", "quality": "좋음~훌륭함", "aroma": "복숭아, 구운 견과류", "unique": "풍미가 더 복합적인 스파클링", "wine_type": "스파클링"}, {"grape": "몬테풀치아노 Montepulciano", "country": "이탈리아", "label_kr": "아스티", "label_en": "Asti", "style": "가벼운 바디, 산도 높음, 스위트", "quality": "허용~좋음", "aroma": "사과, 살구, 꽃, 낮은 알코올", "unique": "낮은 알코올, 스위트 스파클링", "wine_type": "스파클링"}, {"grape": "몬테풀치아노 Montepulciano", "country": "이탈리아", "label_kr": "프로세코", "label_en": "Prosecco", "style": "가벼운 바디, 산도 중간, 드라이", "quality": "허용~좋음", "aroma": "배, 사과, 꽃, 신선한 스타일", "unique": "산뜻하고 쉽게 마시는 스파클링", "wine_type": "스파클링"}, {"grape": "몬테풀치아노 Montepulciano", "country": "스페인", "label_kr": "피노", "label_en": "Fino", "style": "가벼운 바디, 산도 높음, 드라이", "quality": "좋음", "aroma": "녹색 올리브, 아몬드, 효모", "unique": "산도 높고 신선한 셰리", "wine_type": "주정강화(셰리)"}, {"grape": "몬테풀치아노 Montepulciano", "country": "스페인", "label_kr": "올로로소", "label_en": "Oloroso", "style": "중간~진한 바디, 산도 중간, 드라이", "quality": "좋음", "aroma": "호두, 스파이스, 말린 과일", "unique": "산화 숙성, 풍부한 견과류 풍미", "wine_type": "주정강화(셰리)"}, {"grape": "몬테풀치아노 Montepulciano", "country": "스페인", "label_kr": "아몬티아도", "label_en": "Amontillado", "style": "중간 바디, 산도 중간, 드라이", "quality": "좋음", "aroma": "캐러멜, 스파이스, 말린 과일", "unique": "중간 산화, 스파이시 셰리", "wine_type": "주정강화(셰리)"}, {"grape": "몬테풀치아노 Montepulciano", "country": "스페인", "label_kr": "페일크림", "label_en": "Pale Cream", "style": "가벼운~중간 바디, 산도 중간, 스위트", "quality": "허용~좋음", "aroma": "가벼운 캐러멜, 스위트", "unique": "가벼운 셰리, 달콤함", "wine_type": "주정강화(셰리)"}, {"grape": "몬테풀치아노 Montepulciano", "country": "스페인", "label_kr": "미디움", "label_en": "Medium", "style": "가벼운~중간 바디, 산도 중간, 스위트", "quality": "허용~좋음", "aroma": "스위트 캐러멜, 스파이스", "unique": "중간 셰리, 달콤함", "wine_type": "주정강화(셰리)"}, {"grape": "몬테풀치아노 Montepulciano", "country": "스페인", "label_kr": "크림", "label_en": "Cream", "style": "가벼운~중간 바디, 산도 중간, 스위트", "quality": "허용~좋음", "aroma": "풍부한 캐러멜, 스파이스", "unique": "풍부한 셰리, 달콤함", "wine_type": "주정강화(셰리)"}, {"grape": "몬테풀치아노 Montepulciano", "country": "포르투갈", "label_kr": "루비", "label_en": "Ruby", "style": "진한 바디, 산도 중간, 스위트", "quality": "좋음", "aroma": "블랙베리, 체리, 스파이스, 스위트", "unique": "기본형 루비 포트", "wine_type": "주정강화(포트)"}, {"grape": "몬테풀치아노 Montepulciano", "country": "포르투갈", "label_kr": "리저브 루비", "label_en": "Reserve Ruby", "style": "진한 바디, 산도 중간, 스위트", "quality": "좋음", "aroma": "블랙베리, 체리, 스파이스, 스위트", "unique": "더 농축된 루비 포트", "wine_type": "주정강화(포트)"}, {"grape": "몬테풀치아노 Montepulciano", "country": "포르투갈", "label_kr": "레이트 보틀드 빈티지", "label_en": "Late Bottled Vintage", "style": "진한 바디, 산도 중간, 스위트", "quality": "좋음~훌륭함", "aroma": "블랙베리, 체리, 초콜릿, 스위트", "unique": "병입 전 숙성된 포트", "wine_type": "주정강화(포트)"}, {"grape": "몬테풀치아노 Montepulciano", "country": "포르투갈", "label_kr": "빈티지", "label_en": "Vintage", "style": "진한 바디, 산도 중간, 스위트", "quality": "훌륭함", "aroma": "블랙베리, 체리, 건포도, 스위트", "unique": "장기 숙성 포트", "wine_type": "주정강화(포트)"}, {"grape": "몬테풀치아노 Montepulciano", "country": "포르투갈", "label_kr": "토니", "label_en": "Tawny", "style": "가벼운~중간 바디, 산도 중간, 스위트", "quality": "좋음", "aroma": "견과류, 건조 과일, 캐러멜", "unique": "오크 숙성의 견과류 풍미", "wine_type": "주정강화(포트)"}, {"grape": "몬테풀치아노 Montepulciano", "country": "포르투갈", "label_kr": "토니 10년", "label_en": "Tawny 10 Years Old", "style": "가벼운~중간 바디, 산도 중간, 스위트", "quality": "좋음", "aroma": "견과류, 건조 과일, 캐러멜", "unique": "장기 숙성, 복합성", "wine_type": "주정강화(포트)"}, {"grape": "몬테풀치아노 Montepulciano", "country": "포르투갈", "label_kr": "토니 20년", "label_en": "Tawny 20 Years Old", "style": "가벼운~중간 바디, 산도 중간, 스위트", "quality": "좋음", "aroma": "견과류, 건조 과일, 캐러멜", "unique": "더 깊은 견과류와 캐러멜 풍미", "wine_type": "주정강화(포트)"}, {"grape": "몬테풀치아노 Montepulciano", "country": "포르투갈", "label_kr": "토니 30년", "label_en": "Tawny 30 Years Old", "style": "가벼운~중간 바디, 산도 중간, 스위트", "quality": "좋음", "aroma": "견과류, 건조 과일, 캐러멜", "unique": "복합성 증가", "wine_type": "주정강화(포트)"}, {"grape": "몬테풀치아노 Montepulciano", "country": "포르투갈", "label_kr": "토니 40년", "label_en": "Tawny 40 Years Old", "style": "가벼운~중간 바디, 산도 중간, 스위트", "quality": "좋음", "aroma": "견과류, 건조 과일, 캐러멜", "unique": "풍미 집중", "wine_type": "주정강화(포트)"}, {"grape": "몬테풀치아노 Montepulciano", "country": "포르투갈", "label_kr": "토니 50년", "label_en": "Tawny 50 Years Old", "style": "가벼운~중간 바디, 산도 중간, 스위트", "quality": "좋음", "aroma": "견과류, 건조 과일, 캐러멜", "unique": "풍미 농축 최고 수준", "wine_type": "주정강화(포트)"}];
+const FLAGS = {"프랑스": "🇫🇷", "독일": "🇩🇪", "이탈리아": "🇮🇹", "스페인": "🇪🇸", "포르투갈": "🇵🇹", "미국": "🇺🇸", "호주": "🇦🇺", "뉴질랜드": "🇳🇿", "칠레": "🇨🇱", "아르헨티나": "🇦🇷", "남아공": "🇿🇦", "토카이": "🇭🇺"};
+const COUNTRY_ORDER = ["프랑스", "이탈리아", "스페인", "독일", "미국", "호주", "뉴질랜드", "칠레", "아르헨티나", "남아공", "포르투갈", "토카이"];
 
-const FLAGS = {프랑스:'🇫🇷',독일:'🇩🇪',이탈리아:'🇮🇹',스페인:'🇪🇸',포르투갈:'🇵🇹',미국:'🇺🇸',호주:'🇦🇺',뉴질랜드:'🇳🇿',칠레:'🇨🇱',아르헨티나:'🇦🇷',남아공:'🇿🇦',토카이:'🇭🇺'};
-const TYPE_COLORS = {'레드':'레드','화이트':'화이트','스파클링':'스파클링','주정강화(셰리)':'주정강화셰리','주정강화(포트)':'주정강화포트'};
-
-// ── MAP REGION DATA ──
-// Each region: { name, name_en, country, lat, lng, wine_types: [type,...], labels: [{label_kr, label_en, grape, quality, style, aroma, unique}] }
+// ── MAP REGIONS ──
 const MAP_REGIONS = [
-  // 프랑스
-  { name:'부르고뉴', name_en:'Burgundy', country:'프랑스', lat:47.05, lng:4.85, wine_types:['레드','화이트'], keywords:['부르고뉴','빌라주','제브레-샹베르탕','뉘-생-조르주','본','포마르','프리미에 크뤼','그랑 크뤼','뫼르소','퓔리니-몽라셰','샤샤뉴-몽라셰','마콩','푸이-퓌세'] },
-  { name:'샴페인', name_en:'Champagne', country:'프랑스', lat:49.05, lng:4.0, wine_types:['스파클링'], keywords:['샴페인','논-빈티지','빈티지 샴페인'] },
-  { name:'알자스', name_en:'Alsace', country:'프랑스', lat:48.35, lng:7.45, wine_types:['화이트'], keywords:['알자스'] },
-  { name:'루아르 밸리', name_en:'Loire Valley', country:'프랑스', lat:47.4, lng:0.69, wine_types:['화이트'], keywords:['부브레 섹','부브레 드미 섹','상세르','푸이-퓌메','투렌'] },
-  { name:'보르도', name_en:'Bordeaux', country:'프랑스', lat:44.83, lng:-0.58, wine_types:['레드','화이트'], keywords:['보르도','보르도 수페리외르','생-테밀리옹','포므롤','오-메독','마고','포이약','그라브','페삭-레오냥','소테른'] },
-  { name:'론 밸리', name_en:'Rhône Valley', country:'프랑스', lat:44.9, lng:4.8, wine_types:['레드','화이트'], keywords:['코트-로티','에르미타주','크로즈-에르미타주','코트 뒤 론','샤토뇌프-뒤-파프','콩드리유'] },
-  { name:'보졸레', name_en:'Beaujolais', country:'프랑스', lat:46.18, lng:4.73, wine_types:['레드'], keywords:['보졸레','보졸레 빌라주','플뢰리'] },
-  { name:'랑그독-루시용', name_en:'Languedoc-Roussillon', country:'프랑스', lat:43.6, lng:3.88, wine_types:['레드'], keywords:['랑그독-루시용','미네르부아','페이 독'] },
-  { name:'프로방스', name_en:'Provence', country:'프랑스', lat:43.5, lng:5.44, wine_types:['레드'], keywords:['프로방스','코트 드 프로방스'] },
-  // 독일
-  { name:'모젤', name_en:'Mosel', country:'독일', lat:49.9, lng:7.1, wine_types:['화이트'], keywords:['모젤','카비넬','슈페트레제','아우스레제','아이스바인','베렌아우스레제','트로켄베렌아우스레제'] },
-  { name:'라인가우', name_en:'Rheingau', country:'독일', lat:50.0, lng:8.0, wine_types:['화이트'], keywords:['라인가우'] },
-  { name:'팔츠', name_en:'Pfalz', country:'독일', lat:49.3, lng:8.1, wine_types:['화이트'], keywords:['팔츠'] },
-  // 이탈리아
-  { name:'피에몬테', name_en:'Piedmont', country:'이탈리아', lat:44.7, lng:7.98, wine_types:['레드','화이트'], keywords:['바롤로','바르바레스코','바르베라 다스티','가비'] },
-  { name:'베네토', name_en:'Veneto', country:'이탈리아', lat:45.5, lng:11.5, wine_types:['레드','화이트','스파클링'], keywords:['발폴리첼라','발폴리첼라 클라시코','아마로네 델라 발폴리첼라','레치오토 델라 발폴리첼라','소아베','소아베 클라시코','레치오토 디 소아베','프로세코'] },
-  { name:'토스카나', name_en:'Tuscany', country:'이탈리아', lat:43.5, lng:11.1, wine_types:['레드'], keywords:['키안티','키안티 클라시코','키안티 클라시코 리제르바','브루넬로 디 몬탈치노','몬테풀치아노 다브루쪼'] },
-  { name:'풀리아', name_en:'Puglia', country:'이탈리아', lat:40.6, lng:17.0, wine_types:['레드'], keywords:['풀리아'] },
-  { name:'아스티 지역', name_en:'Asti', country:'이탈리아', lat:44.9, lng:8.2, wine_types:['스파클링'], keywords:['아스티'] },
-  { name:'캄파니아', name_en:'Campania', country:'이탈리아', lat:40.9, lng:14.8, wine_types:['화이트'], keywords:['피아노 디 아벨리노'] },
-  { name:'마르케', name_en:'Marche', country:'이탈리아', lat:43.6, lng:13.5, wine_types:['화이트'], keywords:['베르디키오 데이 카스텔리 디 예지'] },
-  // 스페인
-  { name:'리오하', name_en:'Rioja', country:'스페인', lat:42.46, lng:-2.45, wine_types:['레드'], keywords:['리오하','호벤','크리안자','레세르바','그란 레세르바'] },
-  { name:'리베라 델 두에로', name_en:'Ribera del Duero', country:'스페인', lat:41.65, lng:-3.5, wine_types:['레드'], keywords:['리베라 델 두에로'] },
-  { name:'헤레스 (셰리)', name_en:'Jerez (Sherry)', country:'스페인', lat:36.68, lng:-6.14, wine_types:['주정강화(셰리)'], keywords:['피노','올로로소','아몬티아도','페일크림','미디움','크림'] },
-  { name:'프리오랏', name_en:'Priorat', country:'스페인', lat:41.2, lng:0.75, wine_types:['레드'], keywords:['프리오랏'] },
-  { name:'리아스 바이사스', name_en:'Rías Baixas', country:'스페인', lat:42.5, lng:-8.5, wine_types:['화이트'], keywords:['리아스 바이사스'] },
-  { name:'카바 지역', name_en:'Cava (Penedès)', country:'스페인', lat:41.35, lng:1.68, wine_types:['스파클링'], keywords:['카바'] },
-  // 포르투갈
-  { name:'도우루 (포트)', name_en:'Douro (Port)', country:'포르투갈', lat:41.15, lng:-7.8, wine_types:['주정강화(포트)'], keywords:['루비','리저브 루비','레이트 보틀드 빈티지','빈티지','토니','토니 10년','토니 20년','토니 30년','토니 40년','토니 50년'] },
-  // 토카이 (헝가리)
-  { name:'토카이', name_en:'Tokaj', country:'토카이', lat:48.12, lng:21.41, wine_types:['화이트'], keywords:['아수'] },
-  // 미국
-  { name:'나파 밸리', name_en:'Napa Valley', country:'미국', lat:38.5, lng:-122.4, wine_types:['레드','화이트'], keywords:['나파 밸리','오크빌','러더퍼드','칼리스토가'] },
-  { name:'소노마', name_en:'Sonoma', country:'미국', lat:38.3, lng:-122.7, wine_types:['레드','화이트'], keywords:['소노마','로스 카네로스'] },
-  { name:'산타 바바라', name_en:'Santa Barbara', country:'미국', lat:34.8, lng:-120.2, wine_types:['레드','화이트'], keywords:['산타 바바라 카운티'] },
-  { name:'오리건', name_en:'Oregon', country:'미국', lat:45.5, lng:-122.7, wine_types:['레드','화이트'], keywords:['오리건'] },
-  // 호주
-  { name:'바로사 밸리', name_en:'Barossa Valley', country:'호주', lat:-34.5, lng:139.0, wine_types:['레드','화이트'], keywords:['바로사 밸리'] },
-  { name:'야라 밸리', name_en:'Yarra Valley', country:'호주', lat:-37.7, lng:145.5, wine_types:['레드','화이트'], keywords:['야라 밸리'] },
-  { name:'애들레이드 힐스', name_en:'Adelaide Hills', country:'호주', lat:-35.0, lng:138.75, wine_types:['화이트'], keywords:['애들레이드 힐스'] },
-  { name:'헌터 밸리', name_en:'Hunter Valley', country:'호주', lat:-32.7, lng:151.2, wine_types:['레드','화이트'], keywords:['헌터 밸리'] },
-  { name:'마가렛 리버', name_en:'Margaret River', country:'호주', lat:-33.95, lng:115.05, wine_types:['레드','화이트'], keywords:['마가렛 리버'] },
-  { name:'에덴 밸리', name_en:'Eden Valley', country:'호주', lat:-34.3, lng:139.1, wine_types:['화이트'], keywords:['에덴 밸리'] },
-  // 뉴질랜드
-  { name:'말버러', name_en:'Marlborough', country:'뉴질랜드', lat:-41.5, lng:173.95, wine_types:['화이트','레드'], keywords:['말버러'] },
-  { name:'마틴버러', name_en:'Martinborough', country:'뉴질랜드', lat:-41.2, lng:175.45, wine_types:['레드'], keywords:['마틴버러'] },
-  { name:'센트럴 오타고', name_en:'Central Otago', country:'뉴질랜드', lat:-45.0, lng:169.3, wine_types:['레드'], keywords:['센트럴 오타고'] },
-  { name:'호크스 베이', name_en:"Hawke's Bay", country:'뉴질랜드', lat:-39.65, lng:176.85, wine_types:['레드','화이트'], keywords:["호크스 베이"] },
-  // 칠레
-  { name:'카사블랑카 밸리', name_en:'Casablanca Valley', country:'칠레', lat:-33.3, lng:-71.4, wine_types:['레드','화이트'], keywords:['카사블랑카 밸리'] },
-  { name:'마이포 밸리', name_en:'Maipo Valley', country:'칠레', lat:-33.7, lng:-70.6, wine_types:['레드'], keywords:['마이포 밸리'] },
-  { name:'콜차구아 밸리', name_en:'Colchagua Valley', country:'칠레', lat:-34.6, lng:-71.0, wine_types:['레드'], keywords:['콜차구아 밸리'] },
-  { name:'센트럴 밸리 (칠레)', name_en:'Central Valley', country:'칠레', lat:-35.0, lng:-71.5, wine_types:['레드','화이트'], keywords:['센트럴 밸리'] },
-  // 아르헨티나
-  { name:'멘도사', name_en:'Mendoza', country:'아르헨티나', lat:-33.0, lng:-68.85, wine_types:['레드'], keywords:['멘도사'] },
-  // 남아공
-  { name:'스텔렌보스', name_en:'Stellenbosch', country:'남아공', lat:-33.93, lng:18.85, wine_types:['레드'], keywords:['스텔렌보스'] },
-  { name:'웨스턴 케이프', name_en:'Western Cape', country:'남아공', lat:-33.7, lng:19.0, wine_types:['레드','화이트'], keywords:['웨스턴 케이프'] },
-  { name:'콘스탄시아', name_en:'Constantia', country:'남아공', lat:-34.05, lng:18.42, wine_types:['화이트'], keywords:['콘스탄시아'] },
-  { name:'워커 베이', name_en:'Walker Bay', country:'남아공', lat:-34.4, lng:19.25, wine_types:['레드','화이트'], keywords:['워커베이','워커 베이'] },
+  {name:'부르고뉴',name_en:'Burgundy',country:'프랑스',lat:47.05,lng:4.85,wine_types:['레드','화이트'],keywords:['부르고뉴','빌라주','제브레-샹베르탕','뉘-생-조르주','본','포마르','프리미에 크뤼','그랑 크뤼','뫼르소','퓔리니-몽라셰','샤샤뉴-몽라셰','마콩','푸이-퓌세','코트 드 뉘','샹볼-뮈지니']},
+  {name:'샴페인',name_en:'Champagne',country:'프랑스',lat:49.05,lng:4.0,wine_types:['스파클링'],keywords:['샴페인','논-빈티지','빈티지 샴페인']},
+  {name:'알자스',name_en:'Alsace',country:'프랑스',lat:48.35,lng:7.45,wine_types:['화이트'],keywords:['알자스','알자스 그랑 크뤼','방당주 타르디브']},
+  {name:'루아르 밸리',name_en:'Loire Valley',country:'프랑스',lat:47.4,lng:0.69,wine_types:['화이트'],keywords:['부브레 섹','부브레 드미 섹','상세르','푸이-퓌메','투렌']},
+  {name:'보르도',name_en:'Bordeaux',country:'프랑스',lat:44.83,lng:-0.58,wine_types:['레드','화이트'],keywords:['보르도','보르도 수페리외르','생-테밀리옹','포므롤','오-메독','마고','포이약','그라브','페삭-레오냥','소테른','페이 독']},
+  {name:'론 밸리',name_en:'Rhône Valley',country:'프랑스',lat:44.9,lng:4.8,wine_types:['레드','화이트'],keywords:['코트-로티','에르미타주','크로즈-에르미타주','코트 뒤 론','샤토뇌프-뒤-파프','콩드리유']},
+  {name:'보졸레',name_en:'Beaujolais',country:'프랑스',lat:46.18,lng:4.73,wine_types:['레드'],keywords:['보졸레','보졸레 빌라주','플뢰리']},
+  {name:'모젤',name_en:'Mosel',country:'독일',lat:49.9,lng:7.1,wine_types:['화이트'],keywords:['모젤','카비넬','슈페트레제','아우스레제','아이스바인','베렌아우스레제','트로켄베렌아우스레제']},
+  {name:'라인가우/팔츠',name_en:'Rheingau/Pfalz',country:'독일',lat:49.8,lng:8.05,wine_types:['화이트'],keywords:['라인가우','팔츠']},
+  {name:'피에몬테',name_en:'Piedmont',country:'이탈리아',lat:44.7,lng:7.98,wine_types:['레드','화이트'],keywords:['바롤로','바르바레스코','바르베라 다스티','가비']},
+  {name:'베네토',name_en:'Veneto',country:'이탈리아',lat:45.5,lng:11.5,wine_types:['레드','화이트','스파클링'],keywords:['발폴리첼라','발폴리첼라 클라시코','아마로네 델라 발폴리첼라','레치오토 델라 발폴리첼라','소아베','소아베 클라시코','레치오토 디 소아베','프로세코','아스티']},
+  {name:'토스카나',name_en:'Tuscany',country:'이탈리아',lat:43.5,lng:11.1,wine_types:['레드'],keywords:['키안티','키안티 클라시코','키안티 클라시코 리제르바','브루넬로 디 몬탈치노']},
+  {name:'아브루쪼',name_en:'Abruzzo',country:'이탈리아',lat:42.3,lng:14.0,wine_types:['레드'],keywords:['몬테풀치아노 다브루쪼']},
+  {name:'마르케',name_en:'Marche',country:'이탈리아',lat:43.6,lng:13.5,wine_types:['화이트'],keywords:['베르디키오 데이 카스텔리 디 예지']},
+  {name:'캄파니아',name_en:'Campania',country:'이탈리아',lat:40.9,lng:14.8,wine_types:['화이트'],keywords:['피아노 디 아벨리노']},
+  {name:'풀리아',name_en:'Puglia',country:'이탈리아',lat:40.6,lng:17.0,wine_types:['레드'],keywords:['풀리아']},
+  {name:'리오하',name_en:'Rioja',country:'스페인',lat:42.46,lng:-2.45,wine_types:['레드'],keywords:['리오하','호벤','크리안자','레세르바','그란 레세르바']},
+  {name:'리베라 델 두에로',name_en:'Ribera del Duero',country:'스페인',lat:41.65,lng:-3.5,wine_types:['레드'],keywords:['리베라 델 두에로']},
+  {name:'프리오랏',name_en:'Priorat',country:'스페인',lat:41.2,lng:0.75,wine_types:['레드'],keywords:['프리오랏']},
+  {name:'리아스 바이사스',name_en:'Rías Baixas',country:'스페인',lat:42.5,lng:-8.5,wine_types:['화이트'],keywords:['리아스 바이사스']},
+  {name:'헤레스 (셰리)',name_en:'Jerez (Sherry)',country:'스페인',lat:36.68,lng:-6.14,wine_types:['주정강화(셰리)'],keywords:['피노','올로로소','아몬티아도','페일크림','미디움','크림']},
+  {name:'카탈로냐 (카바)',name_en:'Catalonia (Cava)',country:'스페인',lat:41.35,lng:1.68,wine_types:['스파클링'],keywords:['카바']},
+  {name:'도우루 (포트)',name_en:'Douro (Port)',country:'포르투갈',lat:41.15,lng:-7.8,wine_types:['주정강화(포트)'],keywords:['루비','리저브 루비','레이트 보틀드 빈티지','빈티지','토니','토니 10년','토니 20년','토니 30년','토니 40년','토니 50년']},
+  {name:'토카이',name_en:'Tokaj',country:'토카이',lat:48.12,lng:21.41,wine_types:['화이트'],keywords:['아수']},
+  {name:'나파 밸리',name_en:'Napa Valley',country:'미국',lat:38.5,lng:-122.4,wine_types:['레드','화이트'],keywords:['나파 밸리','오크빌','러더퍼드','칼리스토가','캘리포니아']},
+  {name:'소노마',name_en:'Sonoma',country:'미국',lat:38.3,lng:-122.7,wine_types:['레드','화이트'],keywords:['소노마','로스 카네로스']},
+  {name:'오리건',name_en:'Oregon',country:'미국',lat:45.5,lng:-122.7,wine_types:['레드'],keywords:['오리건']},
+  {name:'산타 바바라',name_en:'Santa Barbara',country:'미국',lat:34.8,lng:-120.2,wine_types:['레드','화이트'],keywords:['산타 바바라 카운티','캘리포니아 화이트 진판델']},
+  {name:'바로사 밸리',name_en:'Barossa Valley',country:'호주',lat:-34.5,lng:139.0,wine_types:['레드','화이트'],keywords:['바로사 밸리']},
+  {name:'야라 밸리',name_en:'Yarra Valley',country:'호주',lat:-37.7,lng:145.5,wine_types:['레드','화이트'],keywords:['야라 밸리']},
+  {name:'애들레이드 힐스',name_en:'Adelaide Hills',country:'호주',lat:-35.0,lng:138.75,wine_types:['화이트'],keywords:['애들레이드 힐스']},
+  {name:'헌터 밸리',name_en:'Hunter Valley',country:'호주',lat:-32.7,lng:151.2,wine_types:['화이트'],keywords:['헌터 밸리']},
+  {name:'마가렛 리버',name_en:'Margaret River',country:'호주',lat:-33.95,lng:115.05,wine_types:['레드','화이트'],keywords:['마가렛 리버']},
+  {name:'에덴 밸리/클레어 밸리',name_en:'Eden/Clare Valley',country:'호주',lat:-34.1,lng:139.0,wine_types:['화이트'],keywords:['에덴 밸리','클레어 밸리']},
+  {name:'쿠나와라',name_en:'Coonawarra',country:'호주',lat:-37.3,lng:140.8,wine_types:['레드'],keywords:['쿠나와라']},
+  {name:'말버러',name_en:'Marlborough',country:'뉴질랜드',lat:-41.5,lng:173.95,wine_types:['화이트','레드'],keywords:['말버러']},
+  {name:'마틴버러',name_en:'Martinborough',country:'뉴질랜드',lat:-41.2,lng:175.45,wine_types:['레드'],keywords:['마틴버러']},
+  {name:'센트럴 오타고',name_en:'Central Otago',country:'뉴질랜드',lat:-45.0,lng:169.3,wine_types:['레드'],keywords:['센트럴 오타고']},
+  {name:"호크스 베이",name_en:"Hawke's Bay",country:'뉴질랜드',lat:-39.65,lng:176.85,wine_types:['레드','화이트'],keywords:["호크스 베이"]},
+  {name:'카사블랑카 밸리',name_en:'Casablanca Valley',country:'칠레',lat:-33.3,lng:-71.4,wine_types:['레드','화이트'],keywords:['카사블랑카 밸리']},
+  {name:'마이포 밸리',name_en:'Maipo Valley',country:'칠레',lat:-33.7,lng:-70.6,wine_types:['레드'],keywords:['마이포 밸리']},
+  {name:'콜차구아 밸리',name_en:'Colchagua Valley',country:'칠레',lat:-34.6,lng:-71.0,wine_types:['레드'],keywords:['콜차구아 밸리']},
+  {name:'센트럴 밸리 (칠레)',name_en:'Central Valley',country:'칠레',lat:-35.0,lng:-71.5,wine_types:['레드','화이트'],keywords:['센트럴 밸리']},
+  {name:'멘도사',name_en:'Mendoza',country:'아르헨티나',lat:-33.0,lng:-68.85,wine_types:['레드'],keywords:['멘도사']},
+  {name:'스텔렌보스',name_en:'Stellenbosch',country:'남아공',lat:-33.93,lng:18.85,wine_types:['레드'],keywords:['스텔렌보스','케이프 블렌드']},
+  {name:'웨스턴 케이프',name_en:'Western Cape',country:'남아공',lat:-33.7,lng:19.2,wine_types:['레드','화이트'],keywords:['웨스턴 케이프']},
+  {name:'콘스탄시아',name_en:'Constantia',country:'남아공',lat:-34.05,lng:18.42,wine_types:['화이트'],keywords:['콘스탄시아']},
+  {name:'캡 클라시크 산지',name_en:'Cap Classique',country:'남아공',lat:-34.0,lng:19.0,wine_types:['스파클링'],keywords:['캡 클라시크']},
 ];
 
-// Enrich regions with data from RAW
+// Enrich regions
 MAP_REGIONS.forEach(r => {
-  r.items = RAW.filter(d => r.keywords.some(k => d.label_kr.includes(k) || d.label_en.includes(k)));
+  r.items = RAW.filter(d => r.keywords.some(k => d.label_kr === k || d.label_en === k));
 });
 
 // ── STATE ──
-const FLAGS_MAP = FLAGS;
 let currentType = 'all', currentCountry = 'all', searchTerm = '';
 let mapInstance = null, mapMarkers = [];
 
-// ── MAP INIT ──
+// ── MAP ──
 function initMap() {
   if (mapInstance) return;
-  mapInstance = L.map('wine-map', {
-    center: [30, 10],
-    zoom: 2,
-    minZoom: 2,
-    maxZoom: 8,
-    zoomControl: true,
-  });
-
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-    attribution: '© OpenStreetMap © CARTO',
-    subdomains: 'abcd',
-    maxZoom: 19
+  mapInstance = L.map('wine-map', {center:[30,10],zoom:2,minZoom:2,maxZoom:8});
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{
+    attribution:'© OpenStreetMap © CARTO',subdomains:'abcd',maxZoom:19
   }).addTo(mapInstance);
-
   renderMapMarkers('all');
-
-  // map filter buttons
   document.getElementById('map-filter-bar').addEventListener('click', e => {
     const btn = e.target.closest('.map-filter-btn');
     if (!btn) return;
@@ -820,109 +290,68 @@ function initMap() {
 }
 
 function getMarkerColor(types) {
-  if (types.includes('주정강화(셰리)') || types.includes('주정강화(포트)')) return '#8B4513';
+  if (types.some(t=>t.includes('주정강화'))) return '#8B6914';
   if (types.includes('스파클링')) return '#4A90D9';
   if (types.includes('레드') && types.includes('화이트')) return '#C9A84C';
   if (types.includes('레드')) return '#B03060';
-  if (types.includes('화이트')) return '#5A8A5A';
+  if (types.includes('화이트')) return '#3A7A40';
   return '#C9A84C';
 }
 
 function renderMapMarkers(filterType) {
-  // Remove old markers
   mapMarkers.forEach(m => m.remove());
   mapMarkers = [];
-
   MAP_REGIONS.forEach(region => {
-    const items = filterType === 'all'
-      ? region.items
+    const items = filterType === 'all' || filterType === '주정강화'
+      ? (filterType === '주정강화' ? region.items.filter(d => d.wine_type.includes('주정강화')) : region.items)
       : region.items.filter(d => d.wine_type === filterType);
     if (!items || items.length === 0) return;
-
     const color = getMarkerColor(region.wine_types);
-    const size = Math.min(10 + items.length * 1.2, 28);
-
+    const size = Math.min(10 + items.length * 1.5, 30);
     const icon = L.divIcon({
-      className: '',
-      html: `<div style="
-        width:${size}px;height:${size}px;
-        border-radius:50%;
-        background:${color};
-        border:2px solid rgba(255,255,255,0.7);
-        box-shadow:0 2px 8px rgba(0,0,0,0.5);
-        display:flex;align-items:center;justify-content:center;
-        font-size:${Math.max(8,size*0.4)}px;
-        color:white;font-weight:700;
-        cursor:pointer;
-        transition:transform 0.15s;
-      " title="${region.name}">${items.length}</div>`,
-      iconSize: [size, size],
-      iconAnchor: [size/2, size/2]
+      className:'',
+      html:`<div style="width:${size}px;height:${size}px;border-radius:50%;background:${color};border:2px solid rgba(255,255,255,.7);box-shadow:0 2px 8px rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;font-size:${Math.max(8,size*.38)}px;color:white;font-weight:700;cursor:pointer">${items.length}</div>`,
+      iconSize:[size,size],iconAnchor:[size/2,size/2]
     });
-
-    const typeSet = [...new Set(items.map(d => d.wine_type))];
-    const grapeSet = [...new Set(items.map(d => d.grape))].slice(0,5);
-
+    const typeSet = [...new Set(items.map(d=>d.wine_type))];
+    const grapeSet = [...new Set(items.map(d=>d.grape))].slice(0,4);
     const typeTagsHtml = typeSet.map(t => {
-      const cls = t === '레드' ? 'popup-tag-red' : t === '화이트' ? 'popup-tag-white' : t.includes('스파클링') ? 'popup-tag-sparkling' : 'popup-tag-fortified';
+      const cls = t.includes('포트')?'popup-tag-fortified':t.includes('셰리')?'popup-tag-fortified':t==='레드'?'popup-tag-red':t==='화이트'?'popup-tag-white':'popup-tag-sparkling';
       return `<span class="popup-tag ${cls}">${t}</span>`;
     }).join('');
-
-    const itemsHtml = items.slice(0,6).map(d =>
-      `<div style="display:flex;gap:6px;align-items:baseline;margin:3px 0;">
-        <span style="font-weight:600;font-size:12px;">${d.label_kr}</span>
-        <span style="color:#8C7B6B;font-style:italic;font-size:11px;">${d.label_en}</span>
-      </div>`
-    ).join('');
-    const more = items.length > 6 ? `<div style="font-size:10px;color:#999;margin-top:4px;">+${items.length-6}개 더...</div>` : '';
-
-    const popupContent = `
-      <div class="wine-popup">
-        <div class="wine-popup-region">${FLAGS_MAP[region.country]||''} ${region.name}</div>
-        <div class="wine-popup-region-en">${region.name_en} · ${region.country}</div>
-        <div class="wine-popup-tags">${typeTagsHtml}</div>
-        <div class="wine-popup-grape">🍇 ${grapeSet.join(' · ')}</div>
-        <div style="margin-top:8px;border-top:1px solid #F0E8E0;padding-top:8px;">${itemsHtml}${more}</div>
-      </div>`;
-
-    const marker = L.marker([region.lat, region.lng], { icon })
-      .bindPopup(popupContent, { maxWidth: 260, className: '' })
+    const itemsHtml = items.slice(0,7).map(d =>
+      `<div style="display:flex;gap:6px;align-items:baseline;margin:2px 0">
+        <span style="font-weight:600;font-size:12px">${d.label_kr}</span>
+        <span style="color:#8C7B6B;font-style:italic;font-size:11px">${d.label_en}</span>
+      </div>`).join('');
+    const more = items.length>7?`<div style="font-size:10px;color:#999;margin-top:3px">+${items.length-7}개 더...</div>`:'';
+    const popupContent=`<div class="wine-popup">
+      <div class="wine-popup-region">${FLAGS[region.country]||''} ${region.name}</div>
+      <div class="wine-popup-region-en">${region.name_en} · ${region.country}</div>
+      <div class="wine-popup-tags">${typeTagsHtml}</div>
+      <div class="wine-popup-grape">🍇 ${grapeSet.join(' · ')}</div>
+      <div style="margin-top:8px;border-top:1px solid #F0E8E0;padding-top:8px">${itemsHtml}${more}</div>
+    </div>`;
+    const marker = L.marker([region.lat,region.lng],{icon})
+      .bindPopup(popupContent,{maxWidth:260})
       .addTo(mapInstance);
-
     mapMarkers.push(marker);
   });
 }
 
-// ── TOGGLE MAP ──
 function toggleMap() {
-  const container = document.getElementById('map-container');
-  const filterBar = document.getElementById('map-filter-bar');
-  const btn = document.getElementById('map-toggle-btn');
-  const isOpen = container.classList.contains('open');
-
-  if (isOpen) {
-    container.classList.remove('open');
-    filterBar.classList.remove('open');
-    btn.classList.remove('open');
-    btn.textContent = '지도 펼치기 ▾';
-  } else {
-    container.classList.add('open');
-    filterBar.classList.add('open');
-    btn.classList.add('open');
-    btn.textContent = '지도 접기 ▴';
-    setTimeout(() => {
-      if (!mapInstance) initMap();
-      else mapInstance.invalidateSize();
-    }, 50);
-  }
+  const c=document.getElementById('map-container');
+  const fb=document.getElementById('map-filter-bar');
+  const btn=document.getElementById('map-toggle-btn');
+  const open=c.classList.contains('open');
+  c.classList.toggle('open',!open);
+  fb.classList.toggle('open',!open);
+  btn.textContent=open?'지도 펼치기 ▾':'지도 접기 ▴';
+  if (!open) setTimeout(()=>{if(!mapInstance)initMap();else mapInstance.invalidateSize();},50);
 }
 
-// ── CARD RENDERING ──
-const allCountries = [...new Set(RAW.map(d => d.country))].sort((a,b) => {
-  const order = ['프랑스','이탈리아','스페인','독일','미국','호주','뉴질랜드','칠레','아르헨티나','남아공','포르투갈','토카이'];
-  return order.indexOf(a) - order.indexOf(b);
-});
-
+// ── COUNTRY TABS ──
+const allCountries = COUNTRY_ORDER.filter(c => RAW.some(r=>r.country===c));
 const countryTabsEl = document.getElementById('country-tabs');
 allCountries.forEach(c => {
   const btn = document.createElement('button');
@@ -932,70 +361,71 @@ allCountries.forEach(c => {
   countryTabsEl.appendChild(btn);
 });
 
+// ── FILTER + SEARCH ──
 function getFilteredData() {
+  const st = searchTerm.toLowerCase();
   return RAW.filter(d => {
-    const matchType = currentType === 'all' || d.wine_type === currentType;
-    const matchCountry = currentCountry === 'all' || d.country === currentCountry;
-    const matchSearch = !searchTerm ||
-      d.label_kr.includes(searchTerm) ||
-      d.label_en.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      d.grape.includes(searchTerm) ||
-      d.country.includes(searchTerm) ||
-      d.aroma.includes(searchTerm);
+    const matchType = currentType==='all'
+      || d.wine_type===currentType
+      || (currentType==='주정강화' && d.wine_type.includes('주정강화'));
+    const matchCountry = currentCountry==='all' || d.country===currentCountry;
+    const matchSearch = !st
+      || d.label_kr.includes(searchTerm)
+      || d.label_en.toLowerCase().includes(st)
+      || (d.grape||'').includes(searchTerm)
+      || d.country.includes(searchTerm)
+      || (d.aroma||'').includes(searchTerm)
+      || (d.style||'').includes(searchTerm)
+      || (d.unique||'').includes(searchTerm);
     return matchType && matchCountry && matchSearch;
   });
 }
 
 function renderCards() {
   const data = getFilteredData();
-  const area = document.getElementById('content-area');
   document.getElementById('result-info').innerHTML = `<strong>${data.length}</strong>개 항목`;
-
-  if (data.length === 0) {
-    area.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🍷</div><div class="empty-state-text">검색 결과가 없습니다</div></div>`;
+  const area = document.getElementById('content-area');
+  if (data.length===0) {
+    area.innerHTML=`<div class="empty-state"><div class="empty-state-icon">🍷</div><div class="empty-state-text">검색 결과가 없습니다</div></div>`;
     return;
   }
-
-  const byCountry = {};
-  data.forEach(d => {
-    if (!byCountry[d.country]) byCountry[d.country] = {};
-    if (!byCountry[d.country][d.wine_type]) byCountry[d.country][d.wine_type] = {};
-    if (!byCountry[d.country][d.wine_type][d.grape]) byCountry[d.country][d.wine_type][d.grape] = [];
+  const byCountry={};
+  data.forEach(d=>{
+    if(!byCountry[d.country]) byCountry[d.country]={};
+    if(!byCountry[d.country][d.wine_type]) byCountry[d.country][d.wine_type]={};
+    if(!byCountry[d.country][d.wine_type][d.grape]) byCountry[d.country][d.wine_type][d.grape]=[];
     byCountry[d.country][d.wine_type][d.grape].push(d);
   });
-
-  const typeOrder = ['레드','화이트','스파클링','주정강화(셰리)','주정강화(포트)'];
-  let html = '';
-  const countryOrder = allCountries.filter(c => byCountry[c]);
-
-  countryOrder.forEach(country => {
-    const countryData = byCountry[country];
-    const totalCount = Object.values(countryData).reduce((s,g) => s + Object.values(g).reduce((ss,arr) => ss+arr.length, 0), 0);
-    html += `<div class="country-block">
+  const typeOrder=['레드','로제','화이트','스파클링','주정강화(셰리)','주정강화(포트)'];
+  let html='';
+  const usedCountries=COUNTRY_ORDER.filter(c=>byCountry[c]);
+  usedCountries.forEach(country=>{
+    const cd=byCountry[country];
+    const total=Object.values(cd).reduce((s,g)=>s+Object.values(g).reduce((ss,a)=>ss+a.length,0),0);
+    html+=`<div class="country-block">
       <div class="country-header">
         <span class="country-flag">${FLAGS[country]||'🌍'}</span>
         <span class="country-name">${country}</span>
-        <span class="country-count">${totalCount}종</span>
+        <span class="country-count">${total}종</span>
       </div>`;
-    typeOrder.forEach(wtype => {
-      if (!countryData[wtype]) return;
-      const wtKey = TYPE_COLORS[wtype] || wtype;
-      html += `<div class="wine-type-section"><span class="wine-type-label wt-${wtKey}">${wtype}</span>`;
-      Object.entries(countryData[wtype]).forEach(([grape, items]) => {
-        html += `<div class="grape-group">`;
-        if (items.length > 1) {
-          html += `<div class="grape-header"><span class="grape-name">🍇 ${grape}</span><span class="grape-count-badge">${items.length}개 라벨</span></div>`;
-        }
-        html += `<div class="card-grid">`;
-        items.forEach(item => {
-          html += `<div class="wine-card">
-            <div class="card-stripe stripe-${item.wine_type.replace(/[()]/g,'')}"></div>
+    typeOrder.forEach(wtype=>{
+      if(!cd[wtype]) return;
+      const cls=wtype==='레드'?'레드':wtype==='화이트'?'화이트':wtype==='스파클링'?'스파클링':wtype==='로제'?'로제':'주정강화'+wtype.replace('주정강화','').replace(/[()]/g,'');
+      html+=`<div class="wine-type-section"><span class="wine-type-label wt-${cls}">${wtype}</span>`;
+      Object.entries(cd[wtype]).forEach(([grape,items])=>{
+        html+=`<div class="grape-group">`;
+        if(items.length>1) html+=`<div class="grape-header"><span class="grape-name">🍇 ${grape}</span><span class="grape-count-badge">${items.length}개 라벨</span></div>`;
+        html+=`<div class="card-grid">`;
+        items.forEach(item=>{
+          const stripeClass=item.wine_type.replace(/[()]/g,'');
+          html+=`<div class="wine-card">
+            <div class="card-stripe stripe-${item.wine_type}"></div>
             <div class="card-body">
               <div class="card-label-kr">${item.label_kr}</div>
               <div class="card-label-en">${item.label_en}</div>
               <div class="card-meta">
-                <span class="meta-tag meta-quality">⭐ ${item.quality}</span>
-                <span class="meta-tag meta-grape">🍇 ${item.grape}</span>
+                <span class="meta-tag">⭐ ${item.quality}</span>
+                <span class="meta-tag">🍇 ${item.grape}</span>
               </div>
               <div class="card-detail">
                 <div class="card-detail-row"><span class="detail-icon">🥂</span><span class="detail-text">${item.style}</span></div>
@@ -1005,38 +435,47 @@ function renderCards() {
             </div>
           </div>`;
         });
-        html += `</div></div>`;
+        html+=`</div></div>`;
       });
-      html += `</div>`;
+      html+=`</div>`;
     });
-    html += `</div>`;
+    html+=`</div>`;
   });
-  area.innerHTML = html;
+  area.innerHTML=html;
 }
 
-document.getElementById('type-tabs').addEventListener('click', e => {
-  const btn = e.target.closest('.tab-btn');
-  if (!btn) return;
-  document.querySelectorAll('#type-tabs .tab-btn').forEach(b => b.classList.remove('active'));
+// ── EVENTS ──
+document.getElementById('type-tabs').addEventListener('click', e=>{
+  const btn=e.target.closest('.tab-btn');
+  if(!btn) return;
+  document.querySelectorAll('#type-tabs .tab-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-  currentType = btn.dataset.type;
+  currentType=btn.dataset.type||'all';
   renderCards();
 });
 
-document.getElementById('country-tabs').addEventListener('click', e => {
-  const btn = e.target.closest('.tab-btn');
-  if (!btn) return;
-  document.querySelectorAll('#country-tabs .tab-btn').forEach(b => b.classList.remove('active'));
+document.getElementById('country-all-btn').addEventListener('click',()=>{
+  document.querySelectorAll('#country-tabs .tab-btn, #country-all-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('country-all-btn').classList.add('active');
+  currentCountry='all';
+  renderCards();
+});
+
+document.getElementById('country-tabs').addEventListener('click', e=>{
+  const btn=e.target.closest('.tab-btn[data-country]');
+  if(!btn) return;
+  document.querySelectorAll('#country-tabs .tab-btn, #country-all-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
-  currentCountry = btn.dataset.country;
+  currentCountry=btn.dataset.country;
   renderCards();
 });
 
-document.getElementById('search-input').addEventListener('input', e => {
-  searchTerm = e.target.value.trim();
+document.getElementById('search-input').addEventListener('input', e=>{
+  searchTerm=e.target.value.trim();
   renderCards();
 });
 
+document.getElementById('country-all-btn').classList.add('active');
 renderCards();
 </script>
 </body>
